@@ -30,7 +30,7 @@ class AssetController extends Controller
         Asset::create($validated);
 
         return redirect()
-            ->route('dashboard')
+            ->route('inventory.index')
             ->with('success', 'تم تسجيل المعدات بنجاح.');
     }
 
@@ -69,7 +69,7 @@ class AssetController extends Controller
         $asset->update($validated);
 
         return redirect()
-            ->route('dashboard')
+            ->route('inventory.index')
             ->with('success', 'تم تحديث بيانات المعدات.');
     }
 
@@ -82,7 +82,7 @@ class AssetController extends Controller
         $asset->delete();
 
         return redirect()
-            ->route('dashboard')
+            ->route('inventory.index')
             ->with('success', 'تم حذف المعدات من السجل.');
     }
 

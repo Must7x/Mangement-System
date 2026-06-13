@@ -27,24 +27,7 @@
                         إدارة الموارد والمعدات
                     </p>
                 </div>
-                <nav class="sidebar-nav">
-                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <i class="fa-solid fa-chart-pie"></i>
-                        <span>لوحة التحكم</span>
-                    </a>
-                    <a href="{{ route('assignments.index') }}" class="nav-link {{ request()->routeIs('assignments*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-file-signature"></i>
-                        <span>العهد والتخصيصات</span>
-                    </a>
-                    <a href="{{ route('assets.create') }}" class="nav-link {{ request()->routeIs('assets.create') ? 'active' : '' }}">
-                        <i class="fa-solid fa-box-open"></i>
-                        <span>تسجيل عتاد</span>
-                    </a>
-                    <a href="{{ route('profile.show') }}" class="nav-link {{ request()->routeIs('profile*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span>الملف الشخصي</span>
-                    </a>
-                </nav>
+                <x-sidebar-nav />
                 <div class="sidebar-footer">
                     <p style="margin:0 0 0.25rem;">{{ auth()->user()->name }}</p>
                     <p style="margin:0;opacity:0.8;">{{ auth()->user()->role->label() }}</p>
@@ -58,8 +41,9 @@
                     </x-ministry-logo>
                     <nav class="mobile-nav">
                         <a href="{{ route('dashboard') }}" class="btn btn-ghost btn-sm">لوحة</a>
-                        <a href="{{ route('assignments.index') }}" class="btn btn-ghost btn-sm">عهد</a>
-                        <a href="{{ route('assets.create') }}" class="btn btn-accent btn-sm">+ عتاد</a>
+                        <a href="{{ route('inventory.index') }}" class="btn btn-ghost btn-sm">مخزون</a>
+                        <a href="{{ route('assignments.index') }}" class="btn btn-ghost btn-sm">تخصيص</a>
+                        <a href="{{ route('settings.index') }}" class="btn btn-ghost btn-sm">إعدادات</a>
                     </nav>
                     <div style="display:flex;align-items:center;gap:0.75rem;">
                         <span class="user-chip">

@@ -1,6 +1,6 @@
 <div style="max-width:40rem;margin:0 auto;">
-    <a href="{{ route('dashboard') }}" class="link-action" style="font-size:0.875rem;margin-bottom:1rem;display:inline-flex;">
-        <i class="fa-solid fa-arrow-right"></i> العودة للوحة التحكم
+    <a href="{{ route('inventory.index') }}" class="link-action" style="font-size:0.875rem;margin-bottom:1rem;display:inline-flex;">
+        <i class="fa-solid fa-arrow-right"></i> العودة لإدارة المخزون
     </a>
 
     <x-page-header :title="$title" subtitle="تسجيل بيانات العتاد في المستودع" />

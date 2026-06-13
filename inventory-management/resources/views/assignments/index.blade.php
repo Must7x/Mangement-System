@@ -4,7 +4,7 @@
 
 @section('content')
     <x-page-header
-        title="سجل التخصيصات والعهد"
+        title="إدارة التخصيص"
         subtitle="ربط الأجهزة المتاحة في المخزن بالموظفين وإدارة الإرجاع"
     >
         <x-slot:actions>
