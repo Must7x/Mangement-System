@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="MTNIMA">
+  <rect width="120" height="120" rx="16" fill="#ffffff"/>
+  <rect x="8" y="8" width="104" height="104" rx="12" fill="#1a6b3c"/>
+  <text x="60" y="52" text-anchor="middle" fill="#e5a800" font-family="Arial,sans-serif" font-size="14" font-weight="700">MTNIMA</text>
+  <text x="60" y="72" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="9">EH1J*'FJ'</text>
+  <circle cx="60" cy="88" r="6" fill="#e5a800"/>
+</svg>
