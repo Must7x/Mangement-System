@@ -54,4 +54,9 @@ class UserFactory extends Factory
     {
         return $this->state(fn () => ['role' => UserRole::WarehouseKeeper]);
     }
+
+    public function inventorySupervisor(): static
+    {
+        return $this->state(fn () => ['role' => UserRole::InventorySupervisor]);
+    }
 }

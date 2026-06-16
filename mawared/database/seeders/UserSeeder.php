@@ -28,5 +28,14 @@ class UserSeeder extends Seeder
                 'role' => UserRole::WarehouseKeeper,
             ]
         );
+
+        User::updateOrCreate(
+            ['email' => 'supervisor@mtnima.gov.mr'],
+            [
+                'name' => 'مشرف المخزون',
+                'password' => Hash::make('password'),
+                'role' => UserRole::InventorySupervisor,
+            ]
+        );
     }
 }

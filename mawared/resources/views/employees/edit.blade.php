@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'تعديل موظف')
+@section('title', __('pages.employees_edit'))
 
 @section('content')
     @include('employees._form', [
-        'title' => 'تعديل موظف',
+        'title' => __('pages.employees_edit'),
         'action' => route('employees.update', $employee),
         'method' => 'PUT',
         'employee' => $employee,

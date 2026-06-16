@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssignmentHistoryController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AuthController;
@@ -8,11 +9,16 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/locale/{locale}', [LocaleController::class, 'switch'])
+    ->name('locale.switch')
+    ->where('locale', 'ar|fr|en');
 
 Route::get('/', function () {
     return auth()->check()
@@ -34,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
     Route::get('/assets/create', [AssetController::class, 'create'])->name('assets.create');
     Route::post('/assets', [AssetController::class, 'store'])->name('assets.store');
+    Route::get('/assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
     Route::get('/assets/{asset}/edit', [AssetController::class, 'edit'])->name('assets.edit');
     Route::put('/assets/{asset}', [AssetController::class, 'update'])->name('assets.update');
     Route::delete('/assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
@@ -53,10 +60,16 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     });
 
     Route::resource('departments', DepartmentController::class)->except(['show']);
     Route::resource('employees', EmployeeController::class)->except(['show']);
 
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::resource('maintenances', MaintenanceController::class)->except(['show', 'destroy']);
+    Route::post('maintenances/{maintenance}/complete', [MaintenanceController::class, 'complete'])
+        ->name('maintenances.complete');
+    Route::post('maintenances/{maintenance}/cancel', [MaintenanceController::class, 'cancel'])
+        ->name('maintenances.cancel');
 });

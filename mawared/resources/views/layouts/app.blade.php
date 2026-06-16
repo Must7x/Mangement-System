@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ app()->getLocale() }}" dir="{{ config('locales.direction.' . app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,12 +40,13 @@
                         {{ config('app.name') }}
                     </x-ministry-logo>
                     <nav class="mobile-nav">
-                        <a href="{{ route('dashboard') }}" class="btn btn-ghost btn-sm">لوحة</a>
-                        <a href="{{ route('inventory.index') }}" class="btn btn-ghost btn-sm">مخزون</a>
-                        <a href="{{ route('assignments.index') }}" class="btn btn-ghost btn-sm">تخصيص</a>
-                        <a href="{{ route('assignment-history.index') }}" class="btn btn-ghost btn-sm">سجل</a>
+                        <a href="{{ route('dashboard') }}" class="btn btn-ghost btn-sm">{{ __('nav.dashboard_short') }}</a>
+                        <a href="{{ route('inventory.index') }}" class="btn btn-ghost btn-sm">{{ __('nav.inventory_short') }}</a>
+                        <a href="{{ route('assignments.index') }}" class="btn btn-ghost btn-sm">{{ __('nav.assignments_short') }}</a>
+                        <a href="{{ route('assignment-history.index') }}" class="btn btn-ghost btn-sm">{{ __('nav.history_short') }}</a>
                     </nav>
                     <div style="display:flex;align-items:center;gap:0.75rem;">
+                        <x-locale-switcher />
                         <span class="user-chip">
                             <i class="fa-solid fa-circle-user"></i>
                             {{ auth()->user()->role->label() }}
@@ -53,7 +54,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="btn btn-ghost btn-sm">
-                                <i class="fa-solid fa-right-from-bracket"></i> خروج
+                                <i class="fa-solid fa-right-from-bracket"></i> {{ __('actions.logout') }}
                             </button>
                         </form>
                     </div>

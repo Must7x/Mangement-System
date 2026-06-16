@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'لوحة التحكم')
+@section('title', __('pages.dashboard'))
 
 @section('content')
     <x-page-header
-        title="لوحة التحكم"
+        title="{{ __('pages.dashboard') }}"
         subtitle="نظرة عامة سريعة على المستودع والعمليات"
     />
 
@@ -34,6 +34,7 @@
             <div>
                 <p class="stat-label">تحت الصيانة</p>
                 <p class="stat-value">{{ $stats['maintenance'] }}</p>
+                <p style="font-size:0.75rem;margin:0.25rem 0 0;opacity:0.85;">{{ $stats['open_maintenances'] }} طلب مفتوح</p>
             </div>
             <div class="stat-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
         </div>

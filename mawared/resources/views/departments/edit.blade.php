@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'تعديل القسم')
+@section('title', __('pages.departments_edit'))
 
 @section('content')
     @include('departments._form', [
         'action' => route('departments.update', $department),
         'method' => 'PUT',
-        'title' => 'تعديل بيانات القسم',
+        'title' => __('pages.departments_edit'),
         'department' => $department,
     ])
 @endsection

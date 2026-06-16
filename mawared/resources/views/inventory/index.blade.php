@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'إدارة المخزون')
+@section('title', __('pages.inventory'))
 
 @section('content')
     <x-page-header
-        title="إدارة المخزون"
+        title="{{ __('pages.inventory') }}"
         subtitle="تسجيل وتعديل وحذف العتاد في المستودع"
     >
         <x-slot:actions>
             <a href="{{ route('assets.create') }}" class="btn btn-accent">
-                <i class="fa-solid fa-plus"></i> إضافة عتاد
+                <i class="fa-solid fa-plus"></i> {{ __('actions.add_asset') }}
             </a>
         </x-slot:actions>
     </x-page-header>
@@ -36,7 +36,7 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
                 @if (!empty($filters['q']) || !empty($filters['status']))
-                    <a href="{{ route('inventory.index') }}" class="btn btn-ghost btn-sm">إعادة تعيين</a>
+                    <a href="{{ route('inventory.index') }}" class="btn btn-ghost btn-sm">{{ __('actions.reset') }}</a>
                 @endif
             </form>
         </div>
@@ -70,9 +70,14 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('assets.edit', $asset) }}" class="link-action">
-                                    <i class="fa-solid fa-pen-to-square"></i> تعديل
-                                </a>
+                                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+                                    <a href="{{ route('assets.show', $asset) }}" class="link-action">
+                                        <i class="fa-solid fa-eye"></i> عرض
+                                    </a>
+                                    <a href="{{ route('assets.edit', $asset) }}" class="link-action">
+                                        <i class="fa-solid fa-pen-to-square"></i> تعديل
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -81,7 +86,7 @@
                                 <div class="empty-state">
                                     <i class="fa-solid fa-inbox"></i>
                                     <p>لا توجد معدات مسجّلة.</p>
-                                    <a href="{{ route('assets.create') }}" class="btn btn-primary" style="margin-top:1rem;">تسجيل أول عتاد</a>
+                                    <a href="{{ route('assets.create') }}" class="btn btn-primary" style="margin-top:1rem;">{{ __('actions.register_first_asset') }}</a>
                                 </div>
                             </td>
                         </tr>

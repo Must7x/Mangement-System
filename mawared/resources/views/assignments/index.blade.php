@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'سجل التخصيصات والعهد')
+@section('title', __('pages.assignments'))
 
 @section('content')
     <x-page-header
-        title="إدارة التخصيص"
+        title="{{ __('pages.assignments_header') }}"
         subtitle="ربط الأجهزة المتاحة في المخزن بالموظفين وإدارة الإرجاع"
     >
         <x-slot:actions>
@@ -14,7 +14,7 @@
                     class="btn btn-primary"
                     @if($warehouseAssets->isEmpty() || $employees->isEmpty()) disabled @endif>
                 <i class="fa-solid fa-file-circle-plus"></i>
-                تخصيص عهدة جديدة
+                {{ __('actions.new_assignment') }}
             </button>
         </x-slot:actions>
     </x-page-header>
@@ -79,7 +79,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fa-solid fa-rotate-left"></i> سحب العهدة
+                                        <i class="fa-solid fa-rotate-left"></i> {{ __('actions.revoke_assignment') }}
                                     </button>
                                 </form>
                             </td>
@@ -92,7 +92,7 @@
                                     <p>لا توجد عهد نشطة حالياً.</p>
                                     @if ($warehouseAssets->isNotEmpty() && $employees->isNotEmpty())
                                         <button type="button" id="open-assign-modal-empty" class="btn btn-primary" style="margin-top:1rem;">
-                                            تخصيص أول عهدة
+                                            {{ __('actions.first_assignment') }}
                                         </button>
                                     @endif
                                 </div>
@@ -148,9 +148,9 @@
                     </div>
                     <div style="display:flex;gap:0.75rem;padding-top:0.5rem;">
                         <button type="submit" class="btn btn-primary" style="flex:1;">
-                            <i class="fa-solid fa-check"></i> حفظ العهدة
+                            <i class="fa-solid fa-check"></i> {{ __('actions.save_assignment') }}
                         </button>
-                        <button type="button" data-close-modal class="btn btn-ghost">إلغاء</button>
+                        <button type="button" data-close-modal class="btn btn-ghost">{{ __('actions.cancel') }}</button>
                     </div>
                 </form>
             </div>

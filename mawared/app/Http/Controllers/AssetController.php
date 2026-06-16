@@ -34,6 +34,27 @@ class AssetController extends Controller
             ->with('success', 'تم تسجيل المعدات بنجاح.');
     }
 
+    public function show(Asset $asset): View
+    {
+        $asset->load([
+            'assignment.employee.department',
+            'openMaintenance',
+        ]);
+
+        $assignmentHistories = $asset->assignmentHistories()
+            ->with('employee.department')
+            ->orderByDesc('assigned_date')
+            ->orderByDesc('id')
+            ->get();
+
+        $maintenances = $asset->maintenances()
+            ->orderByDesc('maintenance_start_date')
+            ->orderByDesc('id')
+            ->get();
+
+        return view('assets.show', compact('asset', 'assignmentHistories', 'maintenances'));
+    }
+
     public function edit(Asset $asset): View
     {
         $asset->load('assignment');
@@ -79,6 +100,10 @@ class AssetController extends Controller
             return back()->withErrors(['asset' => 'لا يمكن حذف جهاز مُسنَد عهدة. قم بسحب العهدة أولاً.']);
         }
 
+        if ($asset->openMaintenance()->exists()) {
+            return back()->withErrors(['asset' => 'لا يمكن حذف جهاز له طلب صيانة مفتوح.']);
+        }
+
         $asset->delete();
 
         return redirect()
@@ -120,7 +145,11 @@ class AssetController extends Controller
             return [AssetStatus::Active];
         }
 
-        return [AssetStatus::Warehouse, AssetStatus::Maintenance];
+        if ($asset?->status === AssetStatus::Maintenance) {
+            return [AssetStatus::Maintenance];
+        }
+
+        return [AssetStatus::Warehouse];
     }
 
     private function rejectManualActiveStatus(string $status, ?Asset $asset = null): ?RedirectResponse

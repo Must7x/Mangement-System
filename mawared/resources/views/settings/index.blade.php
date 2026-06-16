@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'الإعدادات')
+@section('title', __('pages.settings'))
 
 @section('content')
     <x-page-header
-        title="الإعدادات"
+        title="{{ __('pages.settings') }}"
         subtitle="إعدادات النظام والحساب الشخصي"
     />
 
@@ -21,7 +21,7 @@
                 <p style="margin:0 0 1rem;color:var(--color-muted);font-size:0.875rem;">{{ $user->email }}</p>
                 <span class="status-badge status-active">{{ $user->role->label() }}</span>
                 <div style="margin-top:1rem;">
-                    <a href="{{ route('profile.show') }}" class="btn btn-ghost btn-sm">عرض الملف الشخصي</a>
+                    <a href="{{ route('profile.show') }}" class="btn btn-ghost btn-sm">{{ __('actions.view_profile') }}</a>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="btn btn-ghost">
-                        <i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج
+                        <i class="fa-solid fa-right-from-bracket"></i> {{ __('actions.logout_full') }}
                     </button>
                 </form>
             </div>

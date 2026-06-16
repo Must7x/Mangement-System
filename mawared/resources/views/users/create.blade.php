@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'إضافة مستخدم')
+@section('title', __('pages.users_create'))
 
 @section('content')
     @include('users._form', [
         'action' => route('users.store'),
         'method' => 'POST',
-        'title' => 'إضافة مستخدم جديد',
+        'title' => __('pages.users_create_form'),
         'user' => null,
     ])
 @endsection

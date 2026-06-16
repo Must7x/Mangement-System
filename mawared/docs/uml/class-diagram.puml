@@ -1,0 +1,218 @@
+@startuml mawared-class-diagram
+' MTNIMA — Mawared Domain Class Diagram
+' Render: PlantUML / VS Code PlantUML extension / plantuml.com
+
+skinparam linetype ortho
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam class {
+  BackgroundColor #FEFEFE
+  BorderColor #334155
+  ArrowColor #334155
+}
+skinparam enum {
+  BackgroundColor #F8FAFC
+  BorderColor #64748B
+}
+
+title Mawared — Core Model Class Diagram
+
+' --- Enums (attribute types) ---
+
+enum UserRole <<enum>> {
+  TechnicalAdmin
+  InventorySupervisor
+  WarehouseKeeper
+  --
+  +label(): string
+  +canManageUsers(): bool
+  +canAccessSettings(): bool
+}
+
+enum AssetStatus <<enum>> {
+  Warehouse
+  Active
+  Maintenance
+  --
+  +badgeClasses(): string
+}
+
+enum MaintenanceStatus <<enum>> {
+  Pending
+  InProgress
+  Completed
+  Cancelled
+  --
+  +openStatuses(): list
+  +editableStatuses(): list
+  +isOpen(): bool
+  +isClosed(): bool
+}
+
+enum MaintenancePriority <<enum>> {
+  Low
+  Medium
+  High
+  Urgent
+  --
+  +options(): list
+}
+
+' --- Core models ---
+
+class User {
+  +id: bigint
+  +name: string
+  +email: string
+  +email_verified_at: datetime?
+  +password: string
+  +role: UserRole
+  +remember_token: string?
+  +created_at: datetime
+  +updated_at: datetime
+  --
+  +isTechnicalAdmin(): bool
+  +isInventorySupervisor(): bool
+  +canManageUsers(): bool
+  +canAccessSettings(): bool
+}
+
+class Department {
+  +id: bigint
+  +name: string
+  +deleted_at: datetime?
+  +created_at: datetime
+  +updated_at: datetime
+  --
+  +employees(): HasMany
+}
+
+class Employee {
+  +id: bigint
+  +name: string
+  +department_id: bigint?
+  +deleted_at: datetime?
+  +created_at: datetime
+  +updated_at: datetime
+  --
+  +department(): BelongsTo
+  +assignments(): HasMany
+  +assignmentHistories(): HasMany
+}
+
+class Asset {
+  +id: bigint
+  +name: string
+  +type: string
+  +serial_number: string
+  +status: AssetStatus
+  +created_at: datetime
+  +updated_at: datetime
+  --
+  +assignment(): HasOne
+  +maintenances(): HasMany
+  +openMaintenance(): HasOne
+  +assignmentHistories(): HasMany
+}
+
+class Assignment {
+  +id: bigint
+  +asset_id: bigint
+  +employee_id: bigint?
+  +employee_name: string
+  +department: string
+  +assigned_date: date
+  +created_at: datetime
+  +updated_at: datetime
+  --
+  +asset(): BelongsTo
+  +employee(): BelongsTo
+}
+
+class AssignmentHistory {
+  +id: bigint
+  +asset_id: bigint?
+  +employee_id: bigint?
+  +employee_name: string
+  +department_name: string?
+  +assigned_date: date
+  +returned_date: date?
+  +created_at: datetime
+  +updated_at: datetime
+  --
+  +asset(): BelongsTo
+  +employee(): BelongsTo
+  +durationDays(): int
+  +durationLabel(): string
+  +isActive(): bool
+}
+
+class Maintenance {
+  +id: bigint
+  +asset_id: bigint
+  +issue_description: string
+  +priority: MaintenancePriority
+  +technician_name: string
+  +status: MaintenanceStatus
+  +maintenance_start_date: date
+  +maintenance_end_date: date?
+  +notes: string?
+  +created_at: datetime
+  +updated_at: datetime
+  --
+  +scopeOpen(query): Builder
+  +asset(): BelongsTo
+  +isOpen(): bool
+  +isClosed(): bool
+  +durationDays(): int
+  +durationLabel(): string
+}
+
+' --- Inheritance ---
+
+Authenticatable <|-- User
+
+' --- Enum usage ---
+
+User --> UserRole : role
+Asset --> AssetStatus : status
+Maintenance --> MaintenanceStatus : status
+Maintenance --> MaintenancePriority : priority
+
+' --- Associations ---
+
+Department "1" o-- "0..*" Employee : employees >
+Employee "0..*" --> "0..1" Department : department >
+Employee "1" o-- "0..*" Assignment : assignments >
+Employee "1" o-- "0..*" AssignmentHistory : assignmentHistories >
+
+Asset "1" o-- "0..1" Assignment : assignment\n(latestOfMany) >
+Asset "1" o-- "0..*" Maintenance : maintenances >
+Asset "1" o-- "0..1" Maintenance : openMaintenance\n(scoped open) >
+Asset "1" o-- "0..*" AssignmentHistory : assignmentHistories >
+
+Assignment "0..*" --> "1" Asset : asset >
+Assignment "0..*" --> "0..1" Employee : employee >
+
+AssignmentHistory "0..*" --> "0..1" Asset : asset >
+AssignmentHistory "0..*" --> "0..1" Employee : employee >
+
+Maintenance "0..*" --> "1" Asset : asset >
+
+note bottom of User
+  Extends Laravel Authenticatable.
+  No Eloquent relations to
+  operational domain models.
+end note
+
+note bottom of Assignment
+  Denormalized snapshot fields:
+  employee_name, department.
+end note
+
+note bottom of AssignmentHistory
+  Archive record for assign / return.
+  department_name is denormalized text.
+end note
+
+@enduml

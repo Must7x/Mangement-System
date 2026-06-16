@@ -1,6 +1,6 @@
 <div style="max-width:32rem;margin:0 auto;">
     <a href="{{ route('departments.index') }}" class="link-action" style="font-size:0.875rem;margin-bottom:1rem;display:inline-flex;">
-        <i class="fa-solid fa-arrow-right"></i> العودة لإدارة الأقسام
+        <i class="fa-solid fa-arrow-right"></i> {{ __('actions.back_to_departments') }}
     </a>
 
     <x-page-header :title="$title" />
@@ -19,7 +19,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-floppy-disk"></i> حفظ
+                    <i class="fa-solid fa-floppy-disk"></i> {{ __('actions.save') }}
                 </button>
             </form>
 
@@ -30,7 +30,7 @@
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">
-                        <i class="fa-solid fa-trash-can"></i> حذف القسم
+                        <i class="fa-solid fa-trash-can"></i> {{ __('actions.delete') }} القسم
                     </button>
                 </form>
             @endif

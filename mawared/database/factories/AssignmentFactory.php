@@ -28,16 +28,28 @@ class AssignmentFactory extends Factory
     public function configure(): static
     {
         return $this->afterMaking(function (Assignment $assignment): void {
-            if (! $assignment->employee_id) {
-                return;
-            }
-
-            $employee = Employee::with('department')->find($assignment->employee_id);
-
-            if ($employee) {
-                $assignment->employee_name = $employee->name;
-                $assignment->department = $employee->department?->name ?? '';
-            }
+            $this->syncEmployeeSnapshot($assignment);
         });
+    }
+
+    private function syncEmployeeSnapshot(Assignment $assignment): void
+    {
+        if (! $assignment->employee_id) {
+            return;
+        }
+
+        $employee = Employee::with('department')->find($assignment->employee_id);
+
+        if (! $employee) {
+            return;
+        }
+
+        if ($assignment->employee_name === '') {
+            $assignment->employee_name = $employee->name;
+        }
+
+        if ($assignment->department === '') {
+            $assignment->department = $employee->department?->name ?? '';
+        }
     }
 }

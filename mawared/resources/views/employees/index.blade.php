@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'إدارة الموظفين')
+@section('title', __('pages.employees'))
 
 @section('content')
     <x-page-header
-        title="إدارة الموظفين"
+        title="{{ __('pages.employees') }}"
         subtitle="إدارة الموظفين وربطهم بالأقسام لاستخدامهم في العهد"
     >
         <x-slot:actions>
             <a href="{{ route('employees.create') }}" class="btn btn-primary">
-                <i class="fa-solid fa-plus"></i> موظف جديد
+                <i class="fa-solid fa-plus"></i> {{ __('actions.add_employee') }}
             </a>
         </x-slot:actions>
     </x-page-header>

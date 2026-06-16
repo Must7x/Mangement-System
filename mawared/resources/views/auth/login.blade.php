@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="{{ app()->getLocale() }}" dir="{{ config('locales.direction.' . app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>تسجيل الدخول — {{ config('app.name') }}</title>
+    <title>{{ __('auth.page_title') }} — {{ config('app.name') }}</title>
     <link rel="icon" href="{{ file_exists(public_path('images/mtnima-logo.png')) ? asset('images/mtnima-logo.png') : asset('images/mtnima-logo.svg') }}">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -42,10 +42,14 @@
             </div>
 
             <div class="login-form-panel">
+                <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+                    <x-locale-switcher />
+                </div>
+
                 <div style="text-align:center;margin-bottom:1.5rem;">
                     <x-app-logo style="width:4rem;height:auto;margin:0 auto 0.75rem;display:block;" alt="MTNIMA" />
-                    <h2 style="font-size:1.35rem;font-weight:700;margin:0;">تسجيل الدخول</h2>
-                    <p style="color:var(--color-muted);font-size:0.875rem;margin:0.35rem 0 0;">للمسؤول التقني وأمين المخزن</p>
+                    <h2 style="font-size:1.35rem;font-weight:700;margin:0;">{{ __('auth.login_title') }}</h2>
+                    <p style="color:var(--color-muted);font-size:0.875rem;margin:0.35rem 0 0;">{{ __('auth.login_subtitle') }}</p>
                 </div>
 
                 @if ($errors->any())
@@ -58,7 +62,7 @@
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group">
-                        <label for="email" class="form-label">البريد الإلكتروني</label>
+                        <label for="email" class="form-label">{{ __('auth.email') }}</label>
                         <div style="position:relative;">
                             <i class="fa-solid fa-envelope" style="position:absolute;right:0.875rem;top:50%;transform:translateY(-50%);color:var(--color-muted);font-size:0.85rem;"></i>
                             <input type="email" name="email" id="email" value="{{ old('email') }}" required autofocus
@@ -66,7 +70,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="password" class="form-label">كلمة المرور</label>
+                        <label for="password" class="form-label">{{ __('auth.password') }}</label>
                         <div style="position:relative;">
                             <i class="fa-solid fa-lock" style="position:absolute;right:0.875rem;top:50%;transform:translateY(-50%);color:var(--color-muted);font-size:0.85rem;"></i>
                             <input type="password" name="password" id="password" required
@@ -75,11 +79,11 @@
                     </div>
                     <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.875rem;color:var(--color-muted);margin-bottom:1.25rem;cursor:pointer;">
                         <input type="checkbox" name="remember" style="accent-color:var(--color-mtnima-green);">
-                        تذكرني على هذا الجهاز
+                        {{ __('auth.remember') }}
                     </label>
                     <button type="submit" class="btn btn-primary" style="width:100%;padding:0.875rem;">
                         <i class="fa-solid fa-arrow-left-to-bracket"></i>
-                        دخول إلى النظام
+                        {{ __('auth.submit') }}
                     </button>
                 </form>
 

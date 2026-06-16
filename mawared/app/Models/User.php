@@ -35,4 +35,19 @@ class User extends Authenticatable
     {
         return $this->role === UserRole::TechnicalAdmin;
     }
+
+    public function isInventorySupervisor(): bool
+    {
+        return $this->role === UserRole::InventorySupervisor;
+    }
+
+    public function canManageUsers(): bool
+    {
+        return $this->role->canManageUsers();
+    }
+
+    public function canAccessSettings(): bool
+    {
+        return $this->role->canAccessSettings();
+    }
 }

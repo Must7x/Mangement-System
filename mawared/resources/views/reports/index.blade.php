@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'التقارير')
+@section('title', __('pages.reports'))
 
 @section('content')
     <x-page-header
-        title="التقارير"
+        title="{{ __('pages.reports') }}"
         subtitle="ملخص إحصائي عن المخزون والتخصيصات"
     />
 

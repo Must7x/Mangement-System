@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'إدارة الأقسام')
+@section('title', __('pages.departments'))
 
 @section('content')
     <x-page-header
-        title="إدارة الأقسام"
+        title="{{ __('pages.departments') }}"
         subtitle="إدارة الأقسام والإدارات في الهيكل التنظيمي للوزارة"
     >
         <x-slot:actions>
             <a href="{{ route('departments.create') }}" class="btn btn-primary">
-                <i class="fa-solid fa-plus"></i> قسم جديد
+                <i class="fa-solid fa-plus"></i> {{ __('actions.add_department') }}
             </a>
         </x-slot:actions>
     </x-page-header>

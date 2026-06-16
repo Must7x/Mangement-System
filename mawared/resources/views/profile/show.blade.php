@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'الملف الشخصي')
+@section('title', __('pages.profile'))
 
 @section('content')
-    <x-page-header title="الملف الشخصي" subtitle="بيانات الحساب والصلاحيات" />
+    <x-page-header title="{{ __('pages.profile') }}" subtitle="بيانات الحساب والصلاحيات" />
 
     <div style="max-width:28rem;">
         <div class="card">

@@ -1,0 +1,108 @@
+@startuml mawared-use-case-overview
+' High-level use cases mapped to actors
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor "Technical\nAdministrator" as TA #E8F5E9
+actor "Inventory\nSupervisor" as IS #E8F5E9
+actor "Warehouse\nKeeper" as WK #E8F5E9
+actor "Department\nManager" as DM #E3F2FD
+actor "Employee" as EM #E3F2FD
+actor "Maintenance\nTechnician" as MT #E3F2FD
+
+rectangle "Mawared" {
+
+  package "Authentication" {
+    usecase "Login / Logout" as UC1
+  }
+
+  package "Inventory" {
+    usecase "Register & edit assets" as UC2
+    usecase "View Asset 360" as UC3
+  }
+
+  package "Assignments" {
+    usecase "Assign asset to employee" as UC4
+    usecase "Withdraw assignment" as UC5
+    usecase "View assignment history" as UC6
+  }
+
+  package "Maintenance" {
+    usecase "Open maintenance request" as UC7
+    usecase "Complete / cancel maintenance" as UC8
+    usecase "View maintenance history" as UC9
+  }
+
+  package "Organization" {
+    usecase "Manage departments" as UC10
+    usecase "Manage employee records" as UC11
+  }
+
+  package "Administration" {
+    usecase "Manage user accounts" as UC12
+    usecase "View dashboard & reports" as UC13
+  }
+
+}
+
+' --- System login actors ---
+
+TA --> UC1
+IS --> UC1
+WK --> UC1
+
+TA --> UC2
+TA --> UC3
+TA --> UC4
+TA --> UC5
+TA --> UC6
+TA --> UC7
+TA --> UC8
+TA --> UC9
+TA --> UC10
+TA --> UC11
+TA --> UC12
+TA --> UC13
+
+IS --> UC2
+IS --> UC3
+IS --> UC4
+IS --> UC5
+IS --> UC6
+IS --> UC7
+IS --> UC8
+IS --> UC9
+IS --> UC10
+IS --> UC11
+IS --> UC13
+
+WK --> UC2
+WK --> UC3
+WK --> UC4
+WK --> UC5
+WK --> UC6
+WK --> UC7
+WK --> UC8
+WK --> UC9
+WK --> UC10
+WK --> UC11
+WK --> UC13
+
+' --- Operational actors (no login) ---
+
+DM ..> UC10 : <<operational>>
+EM ..> UC4 : <<operational>>
+EM ..> UC6 : <<operational>>
+EM ..> UC11 : <<operational>>
+MT ..> UC7 : <<operational>>
+MT ..> UC9 : <<operational>>
+
+note as N1
+  **Login accounts:** Technical Administrator, Inventory Supervisor, Warehouse Keeper.
+  **Operational actors (no login):** Department Manager, Employee, Maintenance Technician —
+  represented in departments, employees, and maintenance records.
+end note
+
+@enduml

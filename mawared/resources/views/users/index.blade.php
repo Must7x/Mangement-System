@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'إدارة المستخدمين')
+@section('title', __('pages.users'))
 
 @section('content')
     <x-page-header
-        title="إدارة المستخدمين"
+        title="{{ __('pages.users') }}"
         subtitle="حسابات المسؤول التقني وأمين المخزن"
     >
         <x-slot:actions>
             <a href="{{ route('users.create') }}" class="btn btn-primary">
-                <i class="fa-solid fa-user-plus"></i> مستخدم جديد
+                <i class="fa-solid fa-user-plus"></i> {{ __('actions.add_user') }}
             </a>
         </x-slot:actions>
     </x-page-header>

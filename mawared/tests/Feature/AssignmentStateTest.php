@@ -41,6 +41,7 @@ class AssignmentStateTest extends TestCase
             'asset_id' => $asset->id,
             'employee_id' => $employee->id,
             'employee_name' => $employee->name,
+            'department_name' => $employee->department?->name,
             'returned_date' => null,
         ]);
     }
@@ -64,20 +65,24 @@ class AssignmentStateTest extends TestCase
     {
         $user = User::factory()->warehouseKeeper()->create();
         $employee = Employee::factory()->create();
+        $employee->load('department');
+        $assignedDate = now()->toDateString();
         $asset = Asset::factory()->warehouse()->create(['status' => AssetStatus::Active]);
 
         $assignment = Assignment::factory()->create([
             'asset_id' => $asset->id,
             'employee_id' => $employee->id,
-            'assigned_date' => now()->toDateString(),
+            'employee_name' => $employee->name,
+            'department' => $employee->department?->name ?? '',
+            'assigned_date' => $assignedDate,
         ]);
 
         AssignmentHistory::create([
             'asset_id' => $asset->id,
             'employee_id' => $employee->id,
-            'employee_name' => $assignment->employee_name,
-            'department_name' => $assignment->department,
-            'assigned_date' => $assignment->assigned_date,
+            'employee_name' => $employee->name,
+            'department_name' => $employee->department?->name,
+            'assigned_date' => $assignedDate,
         ]);
 
         $this->actingAs($user)->delete(route('assignments.destroy', $assignment))
