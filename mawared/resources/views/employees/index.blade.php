@@ -5,7 +5,7 @@
 @section('content')
     <x-page-header
         title="{{ __('pages.employees') }}"
-        subtitle="إدارة الموظفين وربطهم بالأقسام لاستخدامهم في العهد"
+        subtitle="{{ __('pages.employees_subtitle') }}"
     >
         <x-slot:actions>
             <a href="{{ route('employees.create') }}" class="btn btn-primary">
@@ -19,10 +19,10 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>الاسم</th>
-                        <th>القسم</th>
-                        <th>العهد النشطة</th>
-                        <th>تاريخ الإنشاء</th>
+                        <th>{{ __('tables.name') }}</th>
+                        <th>{{ __('tables.department') }}</th>
+                        <th>{{ __('tables.active_assignments') }}</th>
+                        <th>{{ __('tables.created_at') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -30,12 +30,12 @@
                     @forelse ($employees as $employee)
                         <tr>
                             <td><strong>{{ $employee->name }}</strong></td>
-                            <td>{{ $employee->department?->name ?? 'غير محدد' }}</td>
-                            <td>{{ $employee->assignments_count }} عهدة</td>
+                            <td>{{ $employee->department?->name ?? __('common.unspecified') }}</td>
+                            <td>{{ __('messages.employees.assignment_count', ['count' => $employee->assignments_count]) }}</td>
                             <td>{{ $employee->created_at->format('Y-m-d') }}</td>
                             <td>
                                 <a href="{{ route('employees.edit', $employee) }}" class="link-action">
-                                    <i class="fa-solid fa-pen"></i> تعديل
+                                    <i class="fa-solid fa-pen"></i> {{ __('actions.edit') }}
                                 </a>
                             </td>
                         </tr>
@@ -43,7 +43,7 @@
                         <tr>
                             <td colspan="5" class="empty-state">
                                 <i class="fa-solid fa-user-tie"></i>
-                                <p>لا يوجد موظفون مسجلون في النظام بعد.</p>
+                                <p>{{ __('messages.empty.no_employees') }}</p>
                             </td>
                         </tr>
                     @endforelse

@@ -10,7 +10,7 @@
             @if ($departments->isEmpty())
                 <div class="alert alert-warning" style="margin-bottom:1rem;">
                     <i class="fa-solid fa-circle-info"></i>
-                    <span>يجب إنشاء قسم واحد على الأقل قبل تسجيل الموظفين.</span>
+                    <span>{{ __('messages.employees.require_department_first') }}</span>
                 </div>
             @endif
 
@@ -21,14 +21,14 @@
                 @endif
 
                 <div class="form-group">
-                    <label for="name" class="form-label">اسم الموظف</label>
-                    <input type="text" name="name" id="name" value="{{ old('name', $employee?->name) }}" required class="form-input" placeholder="مثال: محمد ولد أحمد">
+                    <label for="name" class="form-label">{{ __('fields.employee_name') }}</label>
+                    <input type="text" name="name" id="name" value="{{ old('name', $employee?->name) }}" required class="form-input" placeholder="{{ __('fields.employee_name_placeholder') }}">
                 </div>
 
                 <div class="form-group">
-                    <label for="department_id" class="form-label">القسم / الإدارة</label>
+                    <label for="department_id" class="form-label">{{ __('fields.department') }}</label>
                     <select name="department_id" id="department_id" required class="form-select">
-                        <option value="">اختر قسماً</option>
+                        <option value="">{{ __('common.select_department') }}</option>
                         @foreach ($departments as $department)
                             <option value="{{ $department->id }}" @selected(old('department_id', $employee?->department_id) == $department->id)>
                                 {{ $department->name }}
@@ -44,12 +44,12 @@
 
             @if ($employee)
                 <form method="POST" action="{{ route('employees.destroy', $employee) }}"
-                      onsubmit="return confirm('هل أنت متأكد من حذف هذا الموظف؟');"
+                      onsubmit="return confirm(@json(__('messages.confirms.delete_employee')));"
                       style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--color-border);">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">
-                        <i class="fa-solid fa-trash-can"></i> {{ __('actions.delete') }} الموظف
+                        <i class="fa-solid fa-trash-can"></i> {{ __('actions.delete_employee') }}
                     </button>
                 </form>
             @endif

@@ -46,10 +46,10 @@ class AssignmentHistory extends Model
         $days = $this->durationDays();
 
         if ($this->returned_date === null) {
-            return $days.' يوم (نشطة)';
+            return __('messages.duration.days_active', ['count' => $days]);
         }
 
-        return $days.' يوم';
+        return __('messages.duration.days', ['count' => $days]);
     }
 
     public function isActive(): bool

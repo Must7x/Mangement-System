@@ -25,7 +25,12 @@ class EnsureRole
             ->contains($user->role);
 
         if (! $allowed) {
-            abort(403, 'ليس لديك صلاحية للوصول إلى هذه الصفحة.');
+            if ($request->expectsJson()) {
+                abort(403, __('messages.errors.access_denied'));
+            }
+
+            return redirect($user->homeRoute())
+                ->with('error', __('messages.errors.access_denied'));
         }
 
         return $next($request);

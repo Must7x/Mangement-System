@@ -74,9 +74,9 @@ class Maintenance extends Model
         $days = $this->durationDays();
 
         if ($this->maintenance_end_date === null) {
-            return $days.' يوم (مفتوحة)';
+            return __('messages.duration.days_open', ['count' => $days]);
         }
 
-        return $days.' يوم';
+        return __('messages.duration.days', ['count' => $days]);
     }
 }

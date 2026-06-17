@@ -31,7 +31,7 @@ class AssetController extends Controller
 
         return redirect()
             ->route('inventory.index')
-            ->with('success', 'تم تسجيل المعدات بنجاح.');
+            ->with('success', __('messages.success.asset_created'));
     }
 
     public function show(Asset $asset): View
@@ -77,13 +77,13 @@ class AssetController extends Controller
 
         if ($asset->assignment && $validated['status'] === AssetStatus::Warehouse->value) {
             return back()
-                ->withErrors(['status' => 'لا يمكن إرجاع الجهاز إلى المخزن يدوياً وهو مُسنَد عهدة. قم بسحب العهدة أولاً.'])
+                ->withErrors(['status' => __('messages.errors.asset_cannot_return_while_assigned')])
                 ->withInput();
         }
 
         if ($asset->status === AssetStatus::Active && ! $asset->assignment) {
             return back()
-                ->withErrors(['status' => 'حالة «نشط» تُدار فقط عبر نظام العهدة.'])
+                ->withErrors(['status' => __('messages.errors.asset_active_status_managed_by_assignments')])
                 ->withInput();
         }
 
@@ -91,24 +91,24 @@ class AssetController extends Controller
 
         return redirect()
             ->route('inventory.index')
-            ->with('success', 'تم تحديث بيانات المعدات.');
+            ->with('success', __('messages.success.asset_updated'));
     }
 
     public function destroy(Asset $asset): RedirectResponse
     {
         if ($asset->assignment()->exists()) {
-            return back()->withErrors(['asset' => 'لا يمكن حذف جهاز مُسنَد عهدة. قم بسحب العهدة أولاً.']);
+            return back()->withErrors(['asset' => __('messages.errors.asset_cannot_delete_assigned')]);
         }
 
         if ($asset->openMaintenance()->exists()) {
-            return back()->withErrors(['asset' => 'لا يمكن حذف جهاز له طلب صيانة مفتوح.']);
+            return back()->withErrors(['asset' => __('messages.errors.asset_cannot_delete_open_maintenance')]);
         }
 
         $asset->delete();
 
         return redirect()
             ->route('inventory.index')
-            ->with('success', 'تم حذف المعدات من السجل.');
+            ->with('success', __('messages.success.asset_deleted'));
     }
 
     /**
@@ -163,7 +163,7 @@ class AssetController extends Controller
         }
 
         return back()
-            ->withErrors(['status' => 'لا يمكن تعيين حالة «نشط» يدوياً. استخدم تخصيص العهدة من صفحة العهد.'])
+            ->withErrors(['status' => __('messages.errors.asset_cannot_set_active_manually')])
             ->withInput();
     }
 
@@ -172,6 +172,9 @@ class AssetController extends Controller
      */
     private function commonAssetTypes(): array
     {
-        return ['لابتوب', 'طابعة', 'حاسوب مكتبي', 'شاشة', 'هاتف', 'أثاث', 'شبكات'];
+        /** @var array<string, string> $options */
+        $options = __('fields.asset_type_options');
+
+        return array_keys($options);
     }
 }

@@ -5,7 +5,7 @@
 @section('content')
     <x-page-header
         title="{{ __('pages.maintenances') }}"
-        subtitle="تتبع أعطال الأجهزة وعمليات الإصلاح"
+        subtitle="{{ __('pages.maintenances_subtitle') }}"
     >
         <x-slot:actions>
             <a href="{{ route('maintenances.create') }}" class="btn btn-primary">
@@ -18,25 +18,25 @@
         <div class="card-header">
             <h3 style="margin:0;font-size:1rem;font-weight:700;display:flex;align-items:center;gap:0.5rem;">
                 <i class="fa-solid fa-screwdriver-wrench" style="color:var(--color-mtnima-green);"></i>
-                سجل الصيانة
+                {{ __('messages.maintenances.section_title') }}
             </h3>
             <form method="GET" action="{{ route('maintenances.index') }}" class="search-bar" style="flex-wrap:wrap;">
                 <input type="search" name="q" value="{{ $filters['q'] ?? '' }}"
-                       placeholder="بحث..."
+                       placeholder="{{ __('common.search_placeholder') }}"
                        class="form-input">
                 <select name="status" class="form-select" style="width:auto;min-width:9rem;">
-                    <option value="">كل الحالات</option>
+                    <option value="">{{ __('filters.all_statuses') }}</option>
                     @foreach ($statuses as $status)
                         <option value="{{ $status->value }}" @selected(($filters['status'] ?? '') === $status->value)>
-                            {{ $status->value }}
+                            {{ $status->label() }}
                         </option>
                     @endforeach
                 </select>
                 <select name="priority" class="form-select" style="width:auto;min-width:8rem;">
-                    <option value="">كل الأولويات</option>
+                    <option value="">{{ __('filters.all_priorities') }}</option>
                     @foreach ($priorities as $priority)
                         <option value="{{ $priority->value }}" @selected(($filters['priority'] ?? '') === $priority->value)>
-                            {{ $priority->value }}
+                            {{ $priority->label() }}
                         </option>
                     @endforeach
                 </select>
@@ -52,14 +52,14 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>الجهاز</th>
-                        <th>وصف العطل</th>
-                        <th>الأولوية</th>
-                        <th>الفني</th>
-                        <th>الحالة</th>
-                        <th>تاريخ البدء</th>
-                        <th>تاريخ الانتهاء</th>
-                        <th>المدة</th>
+                        <th>{{ __('tables.device') }}</th>
+                        <th>{{ __('tables.issue_description') }}</th>
+                        <th>{{ __('tables.priority') }}</th>
+                        <th>{{ __('tables.technician') }}</th>
+                        <th>{{ __('tables.status') }}</th>
+                        <th>{{ __('tables.start_date') }}</th>
+                        <th>{{ __('tables.end_date') }}</th>
+                        <th>{{ __('tables.duration') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -71,25 +71,19 @@
                                     <strong>{{ $maintenance->asset->name }}</strong>
                                     <span class="serial-badge" style="display:block;margin-top:0.2rem;">{{ $maintenance->asset->serial_number }}</span>
                                 @else
-                                    —
+                                    {{ __('common.em_dash') }}
                                 @endif
                             </td>
                             <td style="max-width:14rem;">{{ Str::limit($maintenance->issue_description, 60) }}</td>
-                            <td><span class="status-badge status-maintenance">{{ $maintenance->priority->value }}</span></td>
+                            <td><x-status-badge :status="$maintenance->priority" /></td>
                             <td>{{ $maintenance->technician_name }}</td>
-                            <td>
-                                @if ($maintenance->isOpen())
-                                    <span class="status-badge status-active">{{ $maintenance->status->value }}</span>
-                                @else
-                                    <span class="status-badge status-warehouse">{{ $maintenance->status->value }}</span>
-                                @endif
-                            </td>
+                            <td><x-status-badge :status="$maintenance->status" /></td>
                             <td><span style="font-variant-numeric:tabular-nums;">{{ $maintenance->maintenance_start_date->format('Y/m/d') }}</span></td>
                             <td>
                                 @if ($maintenance->maintenance_end_date)
                                     <span style="font-variant-numeric:tabular-nums;">{{ $maintenance->maintenance_end_date->format('Y/m/d') }}</span>
                                 @else
-                                    <span style="color:var(--color-muted);">—</span>
+                                    <span style="color:var(--color-muted);">{{ __('common.em_dash') }}</span>
                                 @endif
                             </td>
                             <td><strong>{{ $maintenance->durationLabel() }}</strong></td>
@@ -106,7 +100,7 @@
                             <td colspan="9">
                                 <div class="empty-state">
                                     <i class="fa-solid fa-screwdriver-wrench"></i>
-                                    <p>لا توجد سجلات صيانة حتى الآن.</p>
+                                    <p>{{ __('messages.empty.no_maintenance_records') }}</p>
                                 </div>
                             </td>
                         </tr>

@@ -34,7 +34,7 @@ class EmployeeController extends Controller
 
         return redirect()
             ->route('employees.index')
-            ->with('success', 'تم إنشاء الموظف بنجاح.');
+            ->with('success', __('messages.success.employee_created'));
     }
 
     public function edit(Employee $employee): View
@@ -51,20 +51,20 @@ class EmployeeController extends Controller
 
         return redirect()
             ->route('employees.index')
-            ->with('success', 'تم تحديث بيانات الموظف بنجاح.');
+            ->with('success', __('messages.success.employee_updated'));
     }
 
     public function destroy(Employee $employee): RedirectResponse
     {
         if ($employee->assignments()->exists()) {
-            return back()->withErrors(['employee' => 'لا يمكن حذف موظف لديه عهد نشطة. قم بسحب العهدة أولاً.']);
+            return back()->withErrors(['employee' => __('messages.errors.employee_cannot_delete_with_assignments')]);
         }
 
         $employee->delete();
 
         return redirect()
             ->route('employees.index')
-            ->with('success', 'تم حذف الموظف بنجاح.');
+            ->with('success', __('messages.success.employee_deleted'));
     }
 
     /**

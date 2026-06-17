@@ -5,7 +5,7 @@
 @section('content')
     <x-page-header
         title="{{ __('pages.assignments_header') }}"
-        subtitle="ربط الأجهزة المتاحة في المخزن بالموظفين وإدارة الإرجاع"
+        subtitle="{{ __('pages.assignments_subtitle') }}"
     >
         <x-slot:actions>
             <button type="button"
@@ -22,17 +22,17 @@
     @if ($warehouseAssets->isEmpty())
         <div class="alert alert-warning">
             <i class="fa-solid fa-circle-info"></i>
-            <span>لا توجد أجهزة بحالة «مخزن» — زر التخصيص معطّل حتى يتوفر عتاد جاهز للإسناد.</span>
+            <span>{{ __('messages.assignments.no_warehouse_assets') }}</span>
         </div>
     @elseif ($employees->isEmpty())
         <div class="alert alert-warning">
             <i class="fa-solid fa-circle-info"></i>
-            <span>يجب تسجيل موظف واحد على الأقل قبل إنشاء عهدة جديدة.</span>
+            <span>{{ __('messages.assignments.no_employees') }}</span>
         </div>
     @else
         <div class="alert" style="background:#f0fdfa;border-color:#99f6e4;color:#0f766e;margin-bottom:1.25rem;">
             <i class="fa-solid fa-box"></i>
-            <span><strong>{{ $warehouseAssets->count() }}</strong> جهاز متاح في المخزن للتخصيص.</span>
+            <span>{{ __('messages.assignments.available_devices', ['count' => $warehouseAssets->count()]) }}</span>
         </div>
     @endif
 
@@ -40,19 +40,19 @@
         <div class="card-header">
             <h3 style="margin:0;font-size:1rem;font-weight:700;">
                 <i class="fa-solid fa-list-check" style="color:var(--color-primary-light);margin-left:0.5rem;"></i>
-                العهد النشطة
+                {{ __('messages.assignments.active_custody_title') }}
             </h3>
         </div>
         <div style="overflow-x:auto;">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>الجهاز</th>
-                        <th>S/N</th>
-                        <th>الموظف المستلم</th>
-                        <th>القسم</th>
-                        <th>تاريخ الإسناد</th>
-                        <th>إجراء</th>
+                        <th>{{ __('tables.device') }}</th>
+                        <th>{{ __('tables.serial_number') }}</th>
+                        <th>{{ __('tables.recipient') }}</th>
+                        <th>{{ __('tables.department') }}</th>
+                        <th>{{ __('tables.assigned_date') }}</th>
+                        <th>{{ __('tables.action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,15 +73,22 @@
                                 <span style="font-variant-numeric:tabular-nums;">{{ $assignment->assigned_date->format('Y/m/d') }}</span>
                             </td>
                             <td>
-                                <form method="POST"
-                                      action="{{ route('assignments.destroy', $assignment) }}"
-                                      onsubmit="return confirm('تأكيد سحب العهدة وإرجاع الجهاز إلى المخزن؟');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fa-solid fa-rotate-left"></i> {{ __('actions.revoke_assignment') }}
-                                    </button>
-                                </form>
+                                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                                    <a href="{{ route('assignments.receipt', $assignment) }}"
+                                       target="_blank"
+                                       class="btn btn-ghost btn-sm">
+                                        <i class="fa-solid fa-print"></i> {{ __('actions.custody_receipt') }}
+                                    </a>
+                                    <form method="POST"
+                                          action="{{ route('assignments.destroy', $assignment) }}"
+                                          onsubmit="return confirm(@json(__('messages.confirms.revoke_assignment')));">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fa-solid fa-rotate-left"></i> {{ __('actions.revoke_assignment') }}
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -89,7 +96,7 @@
                             <td colspan="6">
                                 <div class="empty-state">
                                     <i class="fa-solid fa-file-signature"></i>
-                                    <p>لا توجد عهد نشطة حالياً.</p>
+                                    <p>{{ __('messages.empty.no_active_assignments') }}</p>
                                     @if ($warehouseAssets->isNotEmpty() && $employees->isNotEmpty())
                                         <button type="button" id="open-assign-modal-empty" class="btn btn-primary" style="margin-top:1rem;">
                                             {{ __('actions.first_assignment') }}
@@ -109,7 +116,7 @@
         <div class="modal-panel">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 style="margin:0;font-weight:700;">تخصيص عهدة جديدة</h3>
+                    <h3 style="margin:0;font-weight:700;">{{ __('messages.assignments.modal_title') }}</h3>
                     <button type="button" data-close-modal class="btn btn-ghost btn-sm" style="padding:0.35rem 0.5rem;">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -117,32 +124,32 @@
                 <form method="POST" action="{{ route('assignments.store') }}" class="card-body">
                     @csrf
                     <div class="form-group">
-                        <label for="asset_id" class="form-label">الجهاز (مخزن فقط)</label>
+                        <label for="asset_id" class="form-label">{{ __('fields.device_warehouse_only') }}</label>
                         <select name="asset_id" id="asset_id" required class="form-select">
-                            <option value="">— اختر جهازاً —</option>
+                            <option value="">{{ __('common.select_device') }}</option>
                             @foreach ($warehouseAssets as $asset)
                                 <option value="{{ $asset->id }}" @selected(old('asset_id') == $asset->id)>
-                                    {{ $asset->name }} — {{ $asset->serial_number }}
+                                    {{ $asset->name }} {{ __('common.em_dash') }} {{ $asset->serial_number }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="employee_id" class="form-label">الموظف المستلم</label>
+                        <label for="employee_id" class="form-label">{{ __('fields.recipient_employee') }}</label>
                         <select name="employee_id" id="employee_id" required class="form-select">
-                            <option value="">— اختر موظفاً —</option>
+                            <option value="">{{ __('common.select_employee') }}</option>
                             @foreach ($employees as $employee)
                                 <option value="{{ $employee->id }}" @selected(old('employee_id') == $employee->id)>
                                     {{ $employee->name }}
                                     @if ($employee->department)
-                                        — {{ $employee->department->name }}
+                                        {{ __('common.em_dash') }} {{ $employee->department->name }}
                                     @endif
                                 </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="assigned_date" class="form-label">تاريخ إسناد العهدة</label>
+                        <label for="assigned_date" class="form-label">{{ __('fields.assignment_date') }}</label>
                         <input type="date" name="assigned_date" id="assigned_date"
                                value="{{ old('assigned_date', now()->format('Y-m-d')) }}" required class="form-input">
                     </div>

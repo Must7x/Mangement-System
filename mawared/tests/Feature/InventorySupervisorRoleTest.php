@@ -39,7 +39,8 @@ class InventorySupervisorRoleTest extends TestCase
         $user = User::factory()->inventorySupervisor()->create();
 
         $this->actingAs($user)->get(route('users.index'))
-            ->assertForbidden();
+            ->assertRedirect($user->homeRoute())
+            ->assertSessionHas('error', __('messages.errors.access_denied'));
     }
 
     public function test_supervisor_cannot_access_settings(): void
@@ -47,6 +48,7 @@ class InventorySupervisorRoleTest extends TestCase
         $user = User::factory()->inventorySupervisor()->create();
 
         $this->actingAs($user)->get(route('settings.index'))
-            ->assertForbidden();
+            ->assertRedirect($user->homeRoute())
+            ->assertSessionHas('error', __('messages.errors.access_denied'));
     }
 }

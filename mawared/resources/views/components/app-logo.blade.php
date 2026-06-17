@@ -6,4 +6,4 @@
         : asset('images/mtnima-logo.svg');
 @endphp
 
-<img src="{{ $logo }}" alt="شعار MTNIMA" {{ $attributes->merge(['class' => $class]) }} @if($style) style="{{ $style }}" @endif>
+<img src="{{ $logo }}" alt="{{ __('branding.logo_alt') }}" {{ $attributes->merge(['class' => $class]) }} @if($style) style="{{ $style }}" @endif>

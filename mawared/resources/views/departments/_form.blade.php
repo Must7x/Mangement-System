@@ -14,8 +14,8 @@
                 @endif
 
                 <div class="form-group">
-                    <label for="name" class="form-label">اسم القسم / الإدارة</label>
-                    <input type="text" name="name" id="name" value="{{ old('name', $department?->name) }}" required class="form-input" placeholder="مثال: مديرية المعلوماتية">
+                    <label for="name" class="form-label">{{ __('fields.department_name') }}</label>
+                    <input type="text" name="name" id="name" value="{{ old('name', $department?->name) }}" required class="form-input" placeholder="{{ __('fields.department_name_placeholder') }}">
                 </div>
 
                 <button type="submit" class="btn btn-primary">
@@ -25,12 +25,12 @@
 
             @if ($department)
                 <form method="POST" action="{{ route('departments.destroy', $department) }}"
-                      onsubmit="return confirm('هل أنت متأكد من حذف هذا القسم؟');"
+                      onsubmit="return confirm(@json(__('messages.confirms.delete_department')));"
                       style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--color-border);">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">
-                        <i class="fa-solid fa-trash-can"></i> {{ __('actions.delete') }} القسم
+                        <i class="fa-solid fa-trash-can"></i> {{ __('actions.delete_department') }}
                     </button>
                 </form>
             @endif

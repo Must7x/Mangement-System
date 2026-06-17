@@ -17,7 +17,7 @@ class AssetFactory extends Factory
     {
         return [
             'name' => fake()->words(2, true),
-            'type' => fake()->randomElement(['لابتوب', 'طابعة', 'حاسوب مكتبي', 'شاشة', 'أثاث']),
+            'type' => fake()->randomElement(['laptop', 'printer', 'desktop', 'monitor', 'furniture']),
             'serial_number' => strtoupper(fake()->unique()->bothify('SN-####-????')),
             'status' => AssetStatus::Warehouse,
         ];

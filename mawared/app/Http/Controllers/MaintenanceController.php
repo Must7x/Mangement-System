@@ -76,7 +76,7 @@ class MaintenanceController extends Controller
 
         return redirect()
             ->route('maintenances.index')
-            ->with('success', 'تم فتح طلب الصيانة بنجاح.');
+            ->with('success', __('messages.success.maintenance_created'));
     }
 
     public function edit(Maintenance $maintenance): View
@@ -93,7 +93,7 @@ class MaintenanceController extends Controller
     public function update(Request $request, Maintenance $maintenance): RedirectResponse
     {
         if ($maintenance->isClosed()) {
-            return back()->withErrors(['maintenance' => 'لا يمكن تعديل طلب صيانة مكتمل أو ملغى.']);
+            return back()->withErrors(['maintenance' => __('messages.errors.maintenance_cannot_edit_closed')]);
         }
 
         $validated = $this->validateMaintenance($request, $maintenance, updating: true);
@@ -102,13 +102,13 @@ class MaintenanceController extends Controller
 
         return redirect()
             ->route('maintenances.index')
-            ->with('success', 'تم تحديث طلب الصيانة.');
+            ->with('success', __('messages.success.maintenance_updated'));
     }
 
     public function complete(Maintenance $maintenance): RedirectResponse
     {
         if ($maintenance->isClosed()) {
-            return back()->withErrors(['maintenance' => 'طلب الصيانة مغلق بالفعل.']);
+            return back()->withErrors(['maintenance' => __('messages.errors.maintenance_already_closed')]);
         }
 
         DB::transaction(function () use ($maintenance): void {
@@ -127,13 +127,13 @@ class MaintenanceController extends Controller
 
         return redirect()
             ->route('maintenances.index')
-            ->with('success', 'تم إكمال الصيانة وإرجاع الجهاز إلى المخزن.');
+            ->with('success', __('messages.success.maintenance_completed'));
     }
 
     public function cancel(Maintenance $maintenance): RedirectResponse
     {
         if ($maintenance->isClosed()) {
-            return back()->withErrors(['maintenance' => 'طلب الصيانة مغلق بالفعل.']);
+            return back()->withErrors(['maintenance' => __('messages.errors.maintenance_already_closed')]);
         }
 
         DB::transaction(function () use ($maintenance): void {
@@ -152,7 +152,7 @@ class MaintenanceController extends Controller
 
         return redirect()
             ->route('maintenances.index')
-            ->with('success', 'تم إلغاء طلب الصيانة وإرجاع الجهاز إلى المخزن.');
+            ->with('success', __('messages.success.maintenance_cancelled'));
     }
 
     /**
@@ -171,15 +171,15 @@ class MaintenanceController extends Controller
     private function assertAssetAvailableForMaintenance(Asset $asset): void
     {
         if ($asset->status !== AssetStatus::Warehouse) {
-            throw new \RuntimeException('الصيانة مسموحة فقط للأجهزة في المخزن.');
+            throw new \RuntimeException(__('messages.errors.maintenance_only_for_warehouse'));
         }
 
         if ($asset->assignment()->exists()) {
-            throw new \RuntimeException('لا يمكن فتح صيانة لجهاز مُسنَد عهدة.');
+            throw new \RuntimeException(__('messages.errors.maintenance_cannot_for_assigned_device'));
         }
 
         if ($asset->openMaintenance()->exists()) {
-            throw new \RuntimeException('يوجد طلب صيانة مفتوح على هذا الجهاز.');
+            throw new \RuntimeException(__('messages.errors.maintenance_device_has_open_request'));
         }
     }
 

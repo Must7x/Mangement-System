@@ -15,7 +15,10 @@ class UserController extends Controller
 {
     public function index(): View
     {
-        $users = User::orderBy('name')->get();
+        $users = User::query()
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->get();
 
         return view('users.index', compact('users'));
     }
@@ -27,19 +30,14 @@ class UserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => ['required', Rule::enum(UserRole::class)],
-        ]);
+        $validated = $request->validate($this->rules());
 
         User::create([
             ...$validated,
             'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('users.index')->with('success', 'تم إنشاء المستخدم بنجاح.');
+        return redirect()->route('users.index')->with('success', __('messages.success.user_created'));
     }
 
     public function edit(User $user): View
@@ -52,16 +50,9 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'password' => ['nullable', 'confirmed', Password::defaults()],
-            'role' => ['required', Rule::enum(UserRole::class)],
-        ]);
+        $validated = $request->validate($this->rules($user));
 
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        $user->role = $validated['role'];
+        $user->fill(collect($validated)->except('password')->all());
 
         if (! empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
@@ -69,17 +60,44 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'تم تحديث بيانات المستخدم.');
+        return redirect()->route('users.index')->with('success', __('messages.success.user_updated'));
     }
 
     public function destroy(User $user): RedirectResponse
     {
         if ($user->id === auth()->id()) {
-            return back()->withErrors(['user' => 'لا يمكنك حذف حسابك الحالي.']);
+            return back()->withErrors(['user' => __('messages.errors.user_cannot_delete_self')]);
         }
 
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'تم حذف المستخدم.');
+        return redirect()->route('users.index')->with('success', __('messages.success.user_deleted'));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function rules(?User $user = null): array
+    {
+        return [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:50'],
+            'job_title' => ['nullable', 'string', 'max:255'],
+            'employee_number' => [
+                'nullable',
+                'string',
+                'max:50',
+                Rule::unique('users', 'employee_number')->ignore($user?->id),
+            ],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($user?->id),
+            ],
+            'password' => [$user ? 'nullable' : 'required', 'confirmed', Password::defaults()],
+            'role' => ['required', Rule::enum(UserRole::class)],
+        ];
     }
 }

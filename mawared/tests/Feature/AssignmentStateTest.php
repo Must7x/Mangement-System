@@ -105,7 +105,7 @@ class AssignmentStateTest extends TestCase
 
     public function test_cannot_set_active_status_manually(): void
     {
-        $user = User::factory()->technicalAdmin()->create();
+        $user = User::factory()->warehouseKeeper()->create();
         $asset = Asset::factory()->warehouse()->create();
 
         $this->actingAs($user)->put(route('assets.update', $asset), [

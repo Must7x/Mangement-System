@@ -20,15 +20,15 @@
 
 <div {{ $attributes->merge(['class' => 'ministry-logo']) }} style="display:flex;align-items:center;gap:0.75rem;">
     <img src="{{ $logo }}"
-         alt="شعار وزارة التحول الرقمي — MTNIMA"
+         alt="{{ __('branding.ministry_logo_alt') }}"
          style="width:{{ $s['img'] }};height:{{ $s['img'] }};object-fit:contain;flex-shrink:0;background:#fff;border-radius:0.5rem;padding:0.2rem;">
     @if ($showText)
         <div style="min-width:0;">
             <p style="margin:0;font-size:{{ $s['sub'] }};color:{{ $mutedColor }};line-height:1.4;">
-                وزارة التحول الرقمي والابتكار وعصرنة الإدارة
+                {{ __('branding.ministry_name') }}
             </p>
             <p style="margin:0.15rem 0 0;font-size:{{ $s['title'] }};font-weight:700;color:{{ $textColor }};line-height:1.35;">
-                {{ $slot->isEmpty() ? 'نظام إدارة الموارد والمعدات' : $slot }}
+                {{ $slot->isEmpty() ? __('branding.app_short') : $slot }}
             </p>
         </div>
     @endif

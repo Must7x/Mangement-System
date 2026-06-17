@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'first_name' => 'الاسم الأول',
+    'last_name' => 'اسم العائلة',
+    'email' => 'البريد الإلكتروني',
+    'password' => 'كلمة المرور',
+    'password_confirmation' => 'تأكيد كلمة المرور',
+    'role' => 'الدور',
+    'phone' => 'رقم الهاتف',
+    'job_title' => 'المسمى الوظيفي',
+    'employee_number' => 'رقم المستخدم',
+    'asset_id' => 'الجهاز',
+    'employee_id' => 'الموظف',
+    'assigned_date' => 'تاريخ الإسناد',
+    'issue_description' => 'وصف العطل',
+    'priority' => 'الأولوية',
+    'technician_name' => 'اسم الفني',
+    'status' => 'الحالة',
+    'maintenance_start_date' => 'تاريخ بدء الصيانة',
+    'notes' => 'الملاحظات',
+    'serial_number' => 'الرقم التسلسلي',
+    'type' => 'النوع',
+    'department_id' => 'القسم',
+    'name' => 'الاسم',
+];

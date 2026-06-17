@@ -16,4 +16,13 @@ enum AssetStatus: string
             self::Warehouse => 'bg-slate-100 text-slate-700 border-slate-200',
         };
     }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Warehouse => __('enums.asset_status.warehouse'),
+            self::Active => __('enums.asset_status.active'),
+            self::Maintenance => __('enums.asset_status.maintenance'),
+        };
+    }
 }

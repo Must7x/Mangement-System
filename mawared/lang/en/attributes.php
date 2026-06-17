@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'first_name' => 'first name',
+    'last_name' => 'last name',
+    'email' => 'email address',
+    'password' => 'password',
+    'password_confirmation' => 'password confirmation',
+    'role' => 'role',
+    'phone' => 'phone number',
+    'job_title' => 'job title',
+    'employee_number' => 'user ID',
+    'asset_id' => 'asset',
+    'employee_id' => 'employee',
+    'assigned_date' => 'assigned date',
+    'issue_description' => 'issue description',
+    'priority' => 'priority',
+    'technician_name' => 'technician name',
+    'status' => 'status',
+    'maintenance_start_date' => 'maintenance start date',
+    'notes' => 'notes',
+    'serial_number' => 'serial number',
+    'type' => 'type',
+    'department_id' => 'department',
+    'name' => 'name',
+];

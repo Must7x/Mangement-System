@@ -1,14 +1,24 @@
 @props(['status'])
 
 @php
-    $enum = $status instanceof \App\Enums\AssetStatus ? $status : \App\Enums\AssetStatus::from($status);
-    $class = match ($enum) {
-        \App\Enums\AssetStatus::Active => 'status-active',
-        \App\Enums\AssetStatus::Maintenance => 'status-maintenance',
-        \App\Enums\AssetStatus::Warehouse => 'status-warehouse',
+    $label = match (true) {
+        $status instanceof \App\Enums\AssetStatus => $status->label(),
+        $status instanceof \App\Enums\MaintenanceStatus => $status->label(),
+        $status instanceof \App\Enums\MaintenancePriority => $status->label(),
+        default => \App\Enums\AssetStatus::from($status)->label(),
+    };
+
+    $class = match (true) {
+        $status instanceof \App\Enums\AssetStatus => match ($status) {
+            \App\Enums\AssetStatus::Active => 'status-active',
+            \App\Enums\AssetStatus::Maintenance => 'status-maintenance',
+            \App\Enums\AssetStatus::Warehouse => 'status-warehouse',
+        },
+        $status instanceof \App\Enums\MaintenancePriority => 'status-maintenance',
+        default => 'status-warehouse',
     };
 @endphp
 
 <span {{ $attributes->merge(['class' => "status-badge {$class}"]) }}>
-    {{ $enum->value }}
+    {{ $label }}
 </span>

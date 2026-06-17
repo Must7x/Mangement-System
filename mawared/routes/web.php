@@ -22,7 +22,7 @@ Route::get('/locale/{locale}', [LocaleController::class, 'switch'])
 
 Route::get('/', function () {
     return auth()->check()
-        ? redirect()->route('dashboard')
+        ? redirect(auth()->user()->homeRoute())
         : redirect()->route('login');
 });
 
@@ -33,25 +33,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-
-    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
-    Route::get('/assets/create', [AssetController::class, 'create'])->name('assets.create');
-    Route::post('/assets', [AssetController::class, 'store'])->name('assets.store');
-    Route::get('/assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
-    Route::get('/assets/{asset}/edit', [AssetController::class, 'edit'])->name('assets.edit');
-    Route::put('/assets/{asset}', [AssetController::class, 'update'])->name('assets.update');
-    Route::delete('/assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
-
-    Route::get('/assignments', [AssignmentController::class, 'index'])->name('assignments.index');
-    Route::post('/assignments', [AssignmentController::class, 'store'])->name('assignments.store');
-    Route::delete('/assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('assignments.destroy');
-
-    Route::get('/assignment-history', [AssignmentHistoryController::class, 'index'])->name('assignment-history.index');
-
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
     Route::middleware('role:technical_admin')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -64,12 +46,36 @@ Route::middleware('auth')->group(function () {
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     });
 
-    Route::resource('departments', DepartmentController::class)->except(['show']);
-    Route::resource('employees', EmployeeController::class)->except(['show']);
+    Route::middleware('role:inventory_supervisor,warehouse_keeper')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('maintenances', MaintenanceController::class)->except(['show', 'destroy']);
-    Route::post('maintenances/{maintenance}/complete', [MaintenanceController::class, 'complete'])
-        ->name('maintenances.complete');
-    Route::post('maintenances/{maintenance}/cancel', [MaintenanceController::class, 'cancel'])
-        ->name('maintenances.cancel');
+        Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+        Route::get('/assets/create', [AssetController::class, 'create'])->name('assets.create');
+        Route::post('/assets', [AssetController::class, 'store'])->name('assets.store');
+        Route::get('/assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
+        Route::get('/assets/{asset}/edit', [AssetController::class, 'edit'])->name('assets.edit');
+        Route::put('/assets/{asset}', [AssetController::class, 'update'])->name('assets.update');
+
+        Route::get('/assignments', [AssignmentController::class, 'index'])->name('assignments.index');
+        Route::post('/assignments', [AssignmentController::class, 'store'])->name('assignments.store');
+        Route::delete('/assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('assignments.destroy');
+        Route::get('/assignments/{assignment}/receipt', [AssignmentController::class, 'receipt'])->name('assignments.receipt');
+
+        Route::get('/assignment-history', [AssignmentHistoryController::class, 'index'])->name('assignment-history.index');
+
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+        Route::resource('maintenances', MaintenanceController::class)->except(['show', 'destroy']);
+        Route::post('maintenances/{maintenance}/complete', [MaintenanceController::class, 'complete'])
+            ->name('maintenances.complete');
+        Route::post('maintenances/{maintenance}/cancel', [MaintenanceController::class, 'cancel'])
+            ->name('maintenances.cancel');
+    });
+
+    Route::middleware('role:inventory_supervisor')->group(function () {
+        Route::delete('/assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
+
+        Route::resource('departments', DepartmentController::class)->except(['show']);
+        Route::resource('employees', EmployeeController::class)->except(['show']);
+    });
 });

@@ -42,7 +42,7 @@ class DepartmentController extends Controller
 
         return redirect()
             ->route('departments.index')
-            ->with('success', 'تم إنشاء القسم بنجاح.');
+            ->with('success', __('messages.success.department_created'));
     }
 
     /**
@@ -71,7 +71,7 @@ class DepartmentController extends Controller
 
         return redirect()
             ->route('departments.index')
-            ->with('success', 'تم تحديث القسم بنجاح.');
+            ->with('success', __('messages.success.department_updated'));
     }
 
     /**
@@ -80,13 +80,13 @@ class DepartmentController extends Controller
     public function destroy(Department $department): RedirectResponse
     {
         if ($department->employees()->exists()) {
-            return back()->withErrors(['department' => 'لا يمكن حذف القسم نظراً لوجود موظفين مسجلين به.']);
+            return back()->withErrors(['department' => __('messages.errors.department_cannot_delete_with_employees')]);
         }
 
         $department->delete();
 
         return redirect()
             ->route('departments.index')
-            ->with('success', 'تم حذف القسم بنجاح.');
+            ->with('success', __('messages.success.department_deleted'));
     }
 }

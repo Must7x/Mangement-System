@@ -43,4 +43,29 @@ class Asset extends Model
     {
         return $this->hasMany(AssignmentHistory::class);
     }
+
+    public function typeLabel(): string
+    {
+        return self::labelForType($this->type);
+    }
+
+    public static function labelForType(string $type): string
+    {
+        $options = __('fields.asset_type_options');
+
+        if (is_array($options) && array_key_exists($type, $options)) {
+            return $options[$type];
+        }
+
+        foreach (config('locales.supported', ['ar']) as $locale) {
+            /** @var array<string, string> $localized */
+            $localized = trans('fields.asset_type_options', [], $locale);
+
+            if ($key = array_search($type, $localized, true)) {
+                return $options[$key] ?? $type;
+            }
+        }
+
+        return $type;
+    }
 }

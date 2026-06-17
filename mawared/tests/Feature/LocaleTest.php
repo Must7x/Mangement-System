@@ -72,7 +72,7 @@ class LocaleTest extends TestCase
 
     public function test_role_labels_use_selected_locale(): void
     {
-        $user = User::factory()->technicalAdmin()->create();
+        $user = User::factory()->warehouseKeeper()->create();
 
         $this->actingAs($user)
             ->from(route('dashboard'))
@@ -80,6 +80,30 @@ class LocaleTest extends TestCase
 
         $this->actingAs($user)
             ->get(route('dashboard'))
-            ->assertSee(__('roles.technical_admin', [], 'en'));
+            ->assertSee(__('roles.warehouse_keeper', [], 'en'));
+    }
+
+    public function test_pagination_uses_selected_locale(): void
+    {
+        $user = User::factory()->create();
+        \App\Models\Asset::factory()->count(16)->create();
+
+        $this->actingAs($user)
+            ->from(route('inventory.index'))
+            ->get(route('locale.switch', 'fr'));
+
+        $this->actingAs($user)
+            ->get(route('inventory.index'))
+            ->assertSee('Suivant', false);
+    }
+
+    public function test_validation_attributes_use_selected_locale(): void
+    {
+        app()->setLocale('fr');
+
+        $this->assertSame(
+            __('attributes.email', [], 'fr'),
+            trans('validation.attributes.email')
+        );
     }
 }

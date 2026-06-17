@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'first_name' => 'prénom',
+    'last_name' => 'nom de famille',
+    'email' => 'adresse e-mail',
+    'password' => 'mot de passe',
+    'password_confirmation' => 'confirmation du mot de passe',
+    'role' => 'rôle',
+    'phone' => 'numéro de téléphone',
+    'job_title' => 'intitulé du poste',
+    'employee_number' => 'identifiant utilisateur',
+    'asset_id' => 'équipement',
+    'employee_id' => 'employé',
+    'assigned_date' => 'date d\'assignation',
+    'issue_description' => 'description de la panne',
+    'priority' => 'priorité',
+    'technician_name' => 'nom du technicien',
+    'status' => 'statut',
+    'maintenance_start_date' => 'date de début de maintenance',
+    'notes' => 'notes',
+    'serial_number' => 'numéro de série',
+    'type' => 'type',
+    'department_id' => 'département',
+    'name' => 'nom',
+];

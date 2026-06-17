@@ -5,7 +5,7 @@
 @section('content')
     <x-page-header
         title="{{ __('pages.users') }}"
-        subtitle="حسابات المسؤول التقني وأمين المخزن"
+        subtitle="{{ __('pages.users_subtitle') }}"
     >
         <x-slot:actions>
             <a href="{{ route('users.create') }}" class="btn btn-primary">
@@ -19,9 +19,12 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>الاسم</th>
-                        <th>البريد</th>
-                        <th>الدور</th>
+                        <th>{{ __('tables.user_full_name') }}</th>
+                        <th>{{ __('tables.employee_number') }}</th>
+                        <th>{{ __('tables.phone') }}</th>
+                        <th>{{ __('tables.job_title') }}</th>
+                        <th>{{ __('tables.email') }}</th>
+                        <th>{{ __('tables.role') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -29,16 +32,19 @@
                     @foreach ($users as $user)
                         <tr>
                             <td>
-                                <strong>{{ $user->name }}</strong>
+                                <strong>{{ $user->fullName() }}</strong>
                                 @if ($user->id === auth()->id())
-                                    <span class="status-badge status-active" style="margin-right:0.5rem;">أنت</span>
+                                    <span class="status-badge status-active" style="margin-right:0.5rem;">{{ __('common.you') }}</span>
                                 @endif
                             </td>
+                            <td>{{ $user->employee_number ?? __('common.em_dash') }}</td>
+                            <td>{{ $user->phone ?? __('common.em_dash') }}</td>
+                            <td>{{ $user->job_title ?? __('common.em_dash') }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role->label() }}</td>
                             <td>
                                 <a href="{{ route('users.edit', $user) }}" class="link-action">
-                                    <i class="fa-solid fa-pen"></i> تعديل
+                                    <i class="fa-solid fa-pen"></i> {{ __('actions.edit') }}
                                 </a>
                             </td>
                         </tr>

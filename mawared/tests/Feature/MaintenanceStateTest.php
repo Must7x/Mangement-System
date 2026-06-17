@@ -162,7 +162,7 @@ class MaintenanceStateTest extends TestCase
 
     public function test_cannot_manually_set_maintenance_status_on_asset_form(): void
     {
-        $user = User::factory()->technicalAdmin()->create();
+        $user = User::factory()->warehouseKeeper()->create();
         $asset = Asset::factory()->warehouse()->create();
 
         $this->actingAs($user)->put(route('assets.update', $asset), [

@@ -47,11 +47,11 @@ class AssignmentController extends Controller
                     ->firstOrFail();
 
                 if ($asset->status !== AssetStatus::Warehouse) {
-                    throw new \RuntimeException('الجهاز غير متاح في المخزن.');
+                    throw new \RuntimeException(__('messages.errors.assignment_device_not_in_warehouse'));
                 }
 
                 if ($asset->assignment()->exists()) {
-                    throw new \RuntimeException('يوجد عهدة نشطة على هذا الجهاز.');
+                    throw new \RuntimeException(__('messages.errors.assignment_device_has_active_custody'));
                 }
 
                 $employee = Employee::with('department')
@@ -82,7 +82,7 @@ class AssignmentController extends Controller
 
         return redirect()
             ->route('assignments.index')
-            ->with('success', 'تم تخصيص العهدة بنجاح.');
+            ->with('success', __('messages.success.assignment_created'));
     }
 
     public function destroy(Assignment $assignment): RedirectResponse
@@ -112,6 +112,17 @@ class AssignmentController extends Controller
 
         return redirect()
             ->route('assignments.index')
-            ->with('success', 'تم سحب العهدة وإرجاع الجهاز إلى المخزن.');
+            ->with('success', __('messages.success.assignment_revoked'));
+    }
+
+    public function receipt(Assignment $assignment): View
+    {
+        $assignment->load(['asset', 'employee.department']);
+
+        return view('assignments.receipt', [
+            'assignment' => $assignment,
+            'receiptNumber' => sprintf('CR-%s-%06d', $assignment->assigned_date->format('Y'), $assignment->id),
+            'assignedBy' => auth()->user()->fullName(),
+        ]);
     }
 }

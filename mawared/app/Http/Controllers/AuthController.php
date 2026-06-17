@@ -24,11 +24,18 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard'));
+            $user = $request->user();
+            $intended = $request->session()->pull('url.intended');
+
+            if ($intended && $user->canAccessUrl($intended)) {
+                return redirect($intended);
+            }
+
+            return redirect($user->homeRoute());
         }
 
         return back()
-            ->withErrors(['email' => 'بيانات الدخول غير صحيحة.'])
+            ->withErrors(['email' => __('messages.errors.auth_invalid_credentials')])
             ->onlyInput('email');
     }
 

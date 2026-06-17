@@ -16,4 +16,14 @@ enum MaintenancePriority: string
     {
         return self::cases();
     }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Low => __('enums.maintenance_priority.low'),
+            self::Medium => __('enums.maintenance_priority.medium'),
+            self::High => __('enums.maintenance_priority.high'),
+            self::Urgent => __('enums.maintenance_priority.urgent'),
+        };
+    }
 }

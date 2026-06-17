@@ -34,4 +34,14 @@ enum MaintenanceStatus: string
     {
         return ! $this->isOpen();
     }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Pending => __('enums.maintenance_status.pending'),
+            self::InProgress => __('enums.maintenance_status.in_progress'),
+            self::Completed => __('enums.maintenance_status.completed'),
+            self::Cancelled => __('enums.maintenance_status.cancelled'),
+        };
+    }
 }

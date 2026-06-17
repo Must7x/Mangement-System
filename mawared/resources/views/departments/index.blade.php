@@ -5,7 +5,7 @@
 @section('content')
     <x-page-header
         title="{{ __('pages.departments') }}"
-        subtitle="إدارة الأقسام والإدارات في الهيكل التنظيمي للوزارة"
+        subtitle="{{ __('pages.departments_subtitle') }}"
     >
         <x-slot:actions>
             <a href="{{ route('departments.create') }}" class="btn btn-primary">
@@ -19,9 +19,9 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>الاسم</th>
-                        <th>عدد الموظفين</th>
-                        <th>تاريخ الإنشاء</th>
+                        <th>{{ __('tables.name') }}</th>
+                        <th>{{ __('tables.employee_count') }}</th>
+                        <th>{{ __('tables.created_at') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -29,12 +29,12 @@
                     @forelse ($departments as $department)
                         <tr>
                             <td><strong>{{ $department->name }}</strong></td>
-                            <td>{{ $department->employees_count ?? $department->employees()->count() }} موظف</td>
+                            <td>{{ __('messages.departments.employee_count', ['count' => $department->employees_count ?? $department->employees()->count()]) }}</td>
                             <td>{{ $department->created_at->format('Y-m-d') }}</td>
                             <td>
                                 <div style="display:flex;gap:0.75rem;">
                                     <a href="{{ route('departments.edit', $department) }}" class="link-action">
-                                        <i class="fa-solid fa-pen"></i> تعديل
+                                        <i class="fa-solid fa-pen"></i> {{ __('actions.edit') }}
                                     </a>
                                 </div>
                             </td>
@@ -43,7 +43,7 @@
                         <tr>
                             <td colspan="4" class="empty-state">
                                 <i class="fa-solid fa-building"></i>
-                                <p>لا توجد أقسام مسجلة في النظام بعد.</p>
+                                <p>{{ __('messages.empty.no_departments') }}</p>
                             </td>
                         </tr>
                     @endforelse

@@ -4,7 +4,7 @@ return [
     'dashboard' => 'لوحة التحكم',
     'inventory' => 'إدارة المخزون',
     'maintenances' => 'إدارة الصيانة',
-    'assignments' => 'إدارة التخصيص',
+    'assignments' => 'إدارة العهد',
     'assignment_history' => 'سجل العهد',
     'reports' => 'التقارير',
     'departments' => 'الأقسام',
@@ -13,6 +13,6 @@ return [
     'settings' => 'الإعدادات',
     'dashboard_short' => 'لوحة',
     'inventory_short' => 'مخزون',
-    'assignments_short' => 'تخصيص',
+    'assignments_short' => 'عهدة',
     'history_short' => 'سجل',
 ];
