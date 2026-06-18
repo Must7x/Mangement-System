@@ -13,6 +13,8 @@ return [
     'demo_account_supervisor' => 'supervisor@mtnima.gov.mr — Inventory Supervisor',
     'demo_account_storekeeper' => 'storekeeper@mtnima.gov.mr — Warehouse Keeper',
     'demo_password' => 'Password:',
+    'demo_password_value' => 'password',
+    'register' => 'Register',
     'hero_description' => 'Unified platform for asset inventory, custody assignment, and warehouse asset lifecycle tracking.',
     'feature_inventory' => 'Inventory and device tracking',
     'feature_assignments' => 'Automated custody assignment and revocation',

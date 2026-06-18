@@ -13,6 +13,8 @@ return [
     'demo_account_supervisor' => 'supervisor@mtnima.gov.mr — مشرف المخزون',
     'demo_account_storekeeper' => 'storekeeper@mtnima.gov.mr — أمين المخزن',
     'demo_password' => 'كلمة المرور:',
+    'demo_password_value' => 'password',
+    'register' => 'إنشاء حساب',
     'hero_description' => 'منصة موحّدة لجرد العتاد، تخصيص العهد، ومتابعة دورة حياة الأصول في المستودع.',
     'feature_inventory' => 'جرد وتتبع الأجهزة',
     'feature_assignments' => 'إسناد وسحب العهدة آلياً',

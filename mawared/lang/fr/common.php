@@ -10,4 +10,12 @@ return [
     'you' => 'Vous',
     'unspecified' => 'Non spécifié',
     'em_dash' => '—',
+    'welcome_title' => 'Commençons',
+    'welcome_subtitle' => 'Plusieurs options s\'offrent à vous, nous vous suggérons de commencer par :',
+    'welcome_docs_prefix' => 'Lisez la',
+    'welcome_docs_link' => 'documentation',
+    'welcome_laracasts_prefix' => 'Regardez les tutoriels vidéo sur',
+    'welcome_laracasts_link' => 'Laracasts',
+    'welcome_deploy' => 'Déployer maintenant',
+    'welcome_changelog' => 'Voir le journal des modifications',
 ];

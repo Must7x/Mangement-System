@@ -13,6 +13,8 @@ return [
     'demo_account_supervisor' => 'supervisor@mtnima.gov.mr — Superviseur des stocks',
     'demo_account_storekeeper' => 'storekeeper@mtnima.gov.mr — Gestionnaire d\'entrepôt',
     'demo_password' => 'Mot de passe :',
+    'demo_password_value' => 'password',
+    'register' => 'Inscription',
     'hero_description' => 'Plateforme unifiée pour l\'inventaire, l\'affectation de garde et le suivi du cycle de vie des actifs en entrepôt.',
     'feature_inventory' => 'Inventaire et suivi des appareils',
     'feature_assignments' => 'Affectation et retrait automatiques de la garde',
