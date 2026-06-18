@@ -20,6 +20,9 @@ return [
         'department_created' => 'Department created successfully.',
         'department_updated' => 'Department updated successfully.',
         'department_deleted' => 'Department deleted successfully.',
+        'role_created' => 'Role created successfully.',
+        'role_updated' => 'Role updated successfully.',
+        'role_deleted' => 'Role deleted successfully.',
     ],
     'errors' => [
         'asset_cannot_return_while_assigned' => 'Cannot manually return an assigned device to warehouse. Revoke the assignment first.',
@@ -39,6 +42,8 @@ return [
         'department_cannot_delete_with_employees' => 'Cannot delete a department that has registered employees.',
         'auth_invalid_credentials' => 'Invalid login credentials.',
         'access_denied' => 'You do not have permission to access this page.',
+        'role_cannot_delete_system' => 'System roles cannot be deleted.',
+        'role_cannot_delete_in_use' => 'This role is assigned to users and cannot be deleted.',
     ],
     'empty' => [
         'no_assets_yet' => 'No assets yet.',
@@ -51,6 +56,7 @@ return [
         'no_assignments' => 'No assignments.',
         'no_employees' => 'No employees registered in the system yet.',
         'no_departments' => 'No departments registered in the system yet.',
+        'no_roles' => 'No roles registered yet.',
         'no_active_custody_or_maintenance' => 'No active assignment or open maintenance on this device.',
         'no_custody_history_for_asset' => 'No assignment history for this device.',
         'no_maintenance_history_for_asset' => 'No maintenance history for this device.',
@@ -63,6 +69,7 @@ return [
         'revoke_assignment' => 'Confirm revoking the assignment and returning the device to warehouse?',
         'complete_maintenance' => 'Confirm completing maintenance and returning the device to warehouse?',
         'cancel_maintenance' => 'Confirm cancelling the maintenance request?',
+        'delete_role' => 'Delete this role?',
     ],
     'dashboard' => [
         'stats' => [
@@ -133,14 +140,19 @@ return [
         'language_label' => 'Language:',
         'language_value' => 'English (LTR)',
         'session' => 'Session',
+        'role_management' => 'Role management',
+        'role_management_hint' => 'Create roles, assign permissions, and control access across the system.',
+        'permissions_summary' => 'Permissions catalog',
     ],
     'profile' => [
         'permissions' => [
             'admin' => 'Full permissions: asset management, deletion, and system oversight.',
+            'supervisor' => 'Inventory supervisor: full operational access and org structure management.',
             'storekeeper' => 'Warehouse management: register assets, assign custody, and revoke assignments.',
         ],
     ],
-    'users' => [
+    'roles' => [
+        'system_role_warning' => 'This is a system role. Changing its permissions affects all users assigned to it.',
     ],
     'employees' => [
         'require_department_first' => 'At least one department must be created before registering employees.',

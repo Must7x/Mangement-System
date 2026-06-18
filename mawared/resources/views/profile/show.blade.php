@@ -15,7 +15,7 @@
                 @if ($user->job_title)
                     <p style="margin:0.35rem 0 0;color:var(--color-muted);font-size:0.875rem;">{{ $user->job_title }}</p>
                 @endif
-                <span class="status-badge status-active" style="margin-top:0.75rem;">{{ $user->role->label() }}</span>
+                <span class="status-badge status-active" style="margin-top:0.75rem;">{{ $user->roleLabel() }}</span>
             </div>
             <div class="card-body" style="display:flex;flex-direction:column;gap:1rem;">
                 @if ($user->employee_number)

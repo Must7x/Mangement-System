@@ -372,6 +372,24 @@ mawared/
 
 ---
 
+## Future Enhancements
+
+The current release is **functionally complete** for core operations (RBAC, assets, assignments, assignment history, maintenance, Asset 360, custody receipt, reports, and multilingual UI). **Asset classification continues to use the existing `type` field** — no categories table or schema changes are planned for this version.
+
+The following items are **out of scope** for the current codebase and documented here for a later phase:
+
+| Enhancement | Summary |
+|-------------|---------|
+| **Categories module** | Structured asset categories (CRUD, FK on assets, migration from `type`, report/dashboard updates). Evaluated and **deferred** to avoid additional migrations, data backfill, test/UML/doc churn while the current type-based model remains sufficient. |
+| **QR codes** | Printable labels linking physical assets to Asset 360 or inventory records. |
+| **Notifications** | In-app or email alerts (e.g. maintenance due, assignment changes, low stock thresholds). |
+| **PDF exports** | Printable/PDF reports and custody documents beyond the current browser-print receipt. |
+| **Advanced analytics** | Deeper dashboards (trends, department-level KPIs, maintenance SLA, category/type breakdowns over time). |
+
+> **Note:** Implementing Categories would touch migrations, seeders, RBAC, asset forms, inventory filters, reports, dashboard, tests, and UML diagrams. It is intentionally reserved for a future milestone.
+
+---
+
 ## الترخيص
 
 MIT — انظر ملف `composer.json`.

@@ -407,7 +407,7 @@ body::before {
 
 .data-table th {
     padding: 0.875rem 1rem;
-    text-align: right;
+    text-align: start;
     font-weight: 600;
     color: var(--color-muted);
     font-size: 0.75rem;
@@ -420,6 +420,7 @@ body::before {
     padding: 0.875rem 1rem;
     border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
+    text-align: start;
 }
 
 .data-table tbody tr {
@@ -705,6 +706,24 @@ body::before {
 }
 
 .login-form-panel .locale-switcher__link:hover {
+    background: #e2e8f0;
+    color: var(--color-text);
+}
+
+.topbar .locale-switcher {
+    background: #f1f5f9;
+    border: 1px solid var(--color-border);
+}
+
+.topbar .locale-switcher__active {
+    color: var(--color-primary);
+}
+
+.topbar .locale-switcher__link {
+    color: var(--color-muted);
+}
+
+.topbar .locale-switcher__link:hover {
     background: #e2e8f0;
     color: var(--color-text);
 }

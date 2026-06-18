@@ -11,6 +11,7 @@ return [
     'employees' => 'Employés',
     'users' => 'Gestion des utilisateurs',
     'settings' => 'Paramètres',
+    'roles' => 'Gestion des rôles',
     'dashboard_short' => 'Tableau',
     'inventory_short' => 'Stock',
     'assignments_short' => 'Affecter',

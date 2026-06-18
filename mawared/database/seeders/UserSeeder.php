@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\UserRole;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -19,7 +20,7 @@ class UserSeeder extends Seeder
                 'job_title' => 'المسؤول التقني',
                 'employee_number' => 'USR-001',
                 'password' => 'password',
-                'role' => UserRole::TechnicalAdmin,
+                'role_id' => $this->roleId(UserRole::TechnicalAdmin->value),
             ]
         );
 
@@ -32,7 +33,7 @@ class UserSeeder extends Seeder
                 'job_title' => 'أمين المخزن',
                 'employee_number' => 'USR-002',
                 'password' => 'password',
-                'role' => UserRole::WarehouseKeeper,
+                'role_id' => $this->roleId(UserRole::WarehouseKeeper->value),
             ]
         );
 
@@ -45,8 +46,14 @@ class UserSeeder extends Seeder
                 'job_title' => 'مشرف المخزون',
                 'employee_number' => 'USR-003',
                 'password' => 'password',
-                'role' => UserRole::InventorySupervisor,
+                'role_id' => $this->roleId(UserRole::InventorySupervisor->value),
             ]
         );
+    }
+
+    private function roleId(string $slug): int
+    {
+        return Role::query()->where('slug', $slug)->value('id')
+            ?? throw new \RuntimeException("Role [{$slug}] not found. Seed RBAC first.");
     }
 }

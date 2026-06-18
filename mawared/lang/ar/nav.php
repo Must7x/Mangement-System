@@ -11,6 +11,7 @@ return [
     'employees' => 'الموظفون',
     'users' => 'إدارة المستخدمين',
     'settings' => 'الإعدادات',
+    'roles' => 'إدارة الأدوار',
     'dashboard_short' => 'لوحة',
     'inventory_short' => 'مخزون',
     'assignments_short' => 'عهدة',

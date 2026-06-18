@@ -40,4 +40,8 @@ return [
     'users_subtitle' => 'Technical administrator and warehouse keeper accounts',
     'settings_subtitle' => 'System and personal account settings',
     'profile_subtitle' => 'Account details and permissions',
+    'roles' => 'Role management',
+    'roles_subtitle' => 'Create roles and assign permissions to users',
+    'roles_create' => 'Create role',
+    'roles_edit' => 'Edit role',
 ];

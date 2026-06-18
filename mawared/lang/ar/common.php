@@ -18,4 +18,6 @@ return [
     'welcome_laracasts_link' => 'Laracasts',
     'welcome_deploy' => 'انشر الآن',
     'welcome_changelog' => 'عرض سجل التغييرات',
+    'system_role' => 'نظامي',
+    'custom_role' => 'مخصص',
 ];

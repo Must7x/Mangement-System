@@ -41,7 +41,7 @@
                             <td>{{ $user->phone ?? __('common.em_dash') }}</td>
                             <td>{{ $user->job_title ?? __('common.em_dash') }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ $user->role->label() }}</td>
+                            <td>{{ $user->roleLabel() }}</td>
                             <td>
                                 <a href="{{ route('users.edit', $user) }}" class="link-action">
                                     <i class="fa-solid fa-pen"></i> {{ __('actions.edit') }}

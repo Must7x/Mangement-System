@@ -68,7 +68,7 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>{{ __('tables.device') }}</th>
+                        <th>{{ __('tables.device_name') }}</th>
                         <th>{{ __('tables.type') }}</th>
                         <th>{{ __('tables.serial_number') }}</th>
                         <th>{{ __('tables.status') }}</th>

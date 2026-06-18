@@ -11,6 +11,7 @@ return [
     'employees' => 'Employees',
     'users' => 'User Management',
     'settings' => 'Settings',
+    'roles' => 'Role management',
     'dashboard_short' => 'Dashboard',
     'inventory_short' => 'Inventory',
     'assignments_short' => 'Assign',

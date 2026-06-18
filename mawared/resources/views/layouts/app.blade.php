@@ -33,7 +33,7 @@
                 @if (auth()->user()->job_title)
                     <p style="margin:0 0 0.25rem;font-size:0.75rem;opacity:0.85;">{{ auth()->user()->job_title }}</p>
                 @endif
-                    <p style="margin:0;opacity:0.8;">{{ auth()->user()->role->label() }}</p>
+                    <p style="margin:0;opacity:0.8;">{{ auth()->user()->roleLabel() }}</p>
                 </div>
             </aside>
 
@@ -54,7 +54,7 @@
                         <x-locale-switcher />
                         <span class="user-chip">
                             <i class="fa-solid fa-circle-user"></i>
-                            {{ auth()->user()->role->label() }}
+                            {{ auth()->user()->roleLabel() }}
                         </span>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

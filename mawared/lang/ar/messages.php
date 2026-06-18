@@ -20,6 +20,9 @@ return [
         'department_created' => 'تم إنشاء القسم بنجاح.',
         'department_updated' => 'تم تحديث القسم بنجاح.',
         'department_deleted' => 'تم حذف القسم بنجاح.',
+        'role_created' => 'تم إنشاء الدور بنجاح.',
+        'role_updated' => 'تم تحديث الدور بنجاح.',
+        'role_deleted' => 'تم حذف الدور بنجاح.',
     ],
     'errors' => [
         'asset_cannot_return_while_assigned' => 'لا يمكن إرجاع الجهاز إلى المخزن يدوياً وهو مُسنَد عهدة. قم بسحب العهدة أولاً.',
@@ -39,6 +42,8 @@ return [
         'department_cannot_delete_with_employees' => 'لا يمكن حذف القسم نظراً لوجود موظفين مسجلين به.',
         'auth_invalid_credentials' => 'بيانات الدخول غير صحيحة.',
         'access_denied' => 'ليس لديك صلاحية للوصول إلى هذه الصفحة.',
+        'role_cannot_delete_system' => 'لا يمكن حذف الأدوار النظامية.',
+        'role_cannot_delete_in_use' => 'هذا الدور مُسنَد لمستخدمين ولا يمكن حذفه.',
     ],
     'empty' => [
         'no_assets_yet' => 'لا توجد معدات بعد.',
@@ -51,6 +56,7 @@ return [
         'no_assignments' => 'لا توجد تخصيصات.',
         'no_employees' => 'لا يوجد موظفون مسجلون في النظام بعد.',
         'no_departments' => 'لا توجد أقسام مسجلة في النظام بعد.',
+        'no_roles' => 'لا توجد أدوار مسجلة بعد.',
         'no_active_custody_or_maintenance' => 'لا توجد عهدة نشطة أو صيانة مفتوحة على هذا الجهاز.',
         'no_custody_history_for_asset' => 'لا يوجد سجل عهد لهذا الجهاز.',
         'no_maintenance_history_for_asset' => 'لا يوجد سجل صيانة لهذا الجهاز.',
@@ -63,6 +69,7 @@ return [
         'revoke_assignment' => 'تأكيد سحب العهدة وإرجاع الجهاز إلى المخزن؟',
         'complete_maintenance' => 'تأكيد إكمال الصيانة وإرجاع الجهاز للمخزن؟',
         'cancel_maintenance' => 'تأكيد إلغاء طلب الصيانة؟',
+        'delete_role' => 'حذف هذا الدور؟',
     ],
     'dashboard' => [
         'stats' => [
@@ -133,14 +140,19 @@ return [
         'language_label' => 'اللغة:',
         'language_value' => 'العربية (RTL)',
         'session' => 'الجلسة',
+        'role_management' => 'إدارة الأدوار',
+        'role_management_hint' => 'إنشاء الأدوار وتعيين الصلاحيات والتحكم في الوصول.',
+        'permissions_summary' => 'فهرس الصلاحيات',
     ],
     'profile' => [
         'permissions' => [
             'admin' => 'صلاحيات كاملة: إدارة العتاد، الحذف، ومتابعة النظام.',
+            'supervisor' => 'مشرف المخزون: صلاحيات تشغيلية كاملة وإدارة الهيكل التنظيمي.',
             'storekeeper' => 'إدارة المخزن: تسجيل العتاد، تخصيص العهد، وسحب الإسناد.',
         ],
     ],
-    'users' => [
+    'roles' => [
+        'system_role_warning' => 'هذا دور نظامي. تغيير صلاحياته يؤثر على جميع المستخدمين المرتبطين به.',
     ],
     'employees' => [
         'require_department_first' => 'يجب إنشاء قسم واحد على الأقل قبل تسجيل الموظفين.',

@@ -29,4 +29,7 @@ return [
     'end_date' => 'Date de fin',
     'action' => 'Action',
     'recipient' => 'Employé destinataire',
+    'slug' => 'Identifiant',
+    'user_count' => 'Utilisateurs',
+    'type' => 'Type',
 ];

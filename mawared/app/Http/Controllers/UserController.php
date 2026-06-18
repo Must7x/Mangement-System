@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserRole;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,6 +16,7 @@ class UserController extends Controller
     public function index(): View
     {
         $users = User::query()
+            ->with('assignedRole')
             ->orderBy('last_name')
             ->orderBy('first_name')
             ->get();
@@ -25,7 +26,7 @@ class UserController extends Controller
 
     public function create(): View
     {
-        return view('users.create', ['roles' => UserRole::cases()]);
+        return view('users.create', ['roles' => Role::orderBy('name')->get()]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -44,7 +45,7 @@ class UserController extends Controller
     {
         return view('users.edit', [
             'user' => $user,
-            'roles' => UserRole::cases(),
+            'roles' => Role::orderBy('name')->get(),
         ]);
     }
 
@@ -97,7 +98,7 @@ class UserController extends Controller
                 Rule::unique('users', 'email')->ignore($user?->id),
             ],
             'password' => [$user ? 'nullable' : 'required', 'confirmed', Password::defaults()],
-            'role' => ['required', Rule::enum(UserRole::class)],
+            'role_id' => ['required', Rule::exists('roles', 'id')],
         ];
     }
 }

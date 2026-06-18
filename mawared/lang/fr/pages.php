@@ -40,4 +40,8 @@ return [
     'users_subtitle' => 'Comptes administrateur technique et gestionnaire d\'entrepôt',
     'settings_subtitle' => 'Paramètres système et compte personnel',
     'profile_subtitle' => 'Données du compte et permissions',
+    'roles' => 'Gestion des rôles',
+    'roles_subtitle' => 'Créer des rôles et assigner des permissions aux utilisateurs',
+    'roles_create' => 'Créer un rôle',
+    'roles_edit' => 'Modifier le rôle',
 ];

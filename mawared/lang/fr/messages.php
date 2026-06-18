@@ -20,6 +20,9 @@ return [
         'department_created' => 'Département créé avec succès.',
         'department_updated' => 'Département mis à jour avec succès.',
         'department_deleted' => 'Département supprimé avec succès.',
+        'role_created' => 'Rôle créé avec succès.',
+        'role_updated' => 'Rôle mis à jour avec succès.',
+        'role_deleted' => 'Rôle supprimé avec succès.',
     ],
     'errors' => [
         'asset_cannot_return_while_assigned' => 'Impossible de retourner manuellement un appareil affecté à l\'entrepôt. Retirez d\'abord l\'affectation.',
@@ -39,6 +42,8 @@ return [
         'department_cannot_delete_with_employees' => 'Impossible de supprimer un département ayant des employés enregistrés.',
         'auth_invalid_credentials' => 'Identifiants de connexion invalides.',
         'access_denied' => 'Vous n\'avez pas la permission d\'accéder à cette page.',
+        'role_cannot_delete_system' => 'Les rôles système ne peuvent pas être supprimés.',
+        'role_cannot_delete_in_use' => 'Ce rôle est assigné à des utilisateurs et ne peut pas être supprimé.',
     ],
     'empty' => [
         'no_assets_yet' => 'Aucun équipement pour le moment.',
@@ -51,6 +56,7 @@ return [
         'no_assignments' => 'Aucune affectation.',
         'no_employees' => 'Aucun employé enregistré dans le système pour le moment.',
         'no_departments' => 'Aucun département enregistré dans le système pour le moment.',
+        'no_roles' => 'Aucun rôle enregistré pour le moment.',
         'no_active_custody_or_maintenance' => 'Aucune affectation active ni maintenance ouverte sur cet appareil.',
         'no_custody_history_for_asset' => 'Aucun historique d\'affectation pour cet appareil.',
         'no_maintenance_history_for_asset' => 'Aucun historique de maintenance pour cet appareil.',
@@ -63,6 +69,7 @@ return [
         'revoke_assignment' => 'Confirmer le retrait de l\'affectation et le retour de l\'appareil à l\'entrepôt ?',
         'complete_maintenance' => 'Confirmer la fin de la maintenance et le retour de l\'appareil à l\'entrepôt ?',
         'cancel_maintenance' => 'Confirmer l\'annulation de la demande de maintenance ?',
+        'delete_role' => 'Supprimer ce rôle ?',
     ],
     'dashboard' => [
         'stats' => [
@@ -133,14 +140,19 @@ return [
         'language_label' => 'Langue :',
         'language_value' => 'Français (LTR)',
         'session' => 'Session',
+        'role_management' => 'Gestion des rôles',
+        'role_management_hint' => 'Créer des rôles, assigner des permissions et contrôler les accès.',
+        'permissions_summary' => 'Catalogue des permissions',
     ],
     'profile' => [
         'permissions' => [
             'admin' => 'Permissions complètes : gestion des équipements, suppression et supervision du système.',
+            'supervisor' => 'Superviseur des stocks : accès opérationnel complet et gestion de la structure organisationnelle.',
             'storekeeper' => 'Gestion de l\'entrepôt : enregistrer les équipements, affecter la garde et retirer les affectations.',
         ],
     ],
-    'users' => [
+    'roles' => [
+        'system_role_warning' => 'Il s\'agit d\'un rôle système. Modifier ses permissions affecte tous les utilisateurs assignés.',
     ],
     'employees' => [
         'require_department_first' => 'Au moins un département doit être créé avant d\'enregistrer des employés.',

@@ -18,4 +18,6 @@ return [
     'welcome_laracasts_link' => 'Laracasts',
     'welcome_deploy' => 'Déployer maintenant',
     'welcome_changelog' => 'Voir le journal des modifications',
+    'system_role' => 'Système',
+    'custom_role' => 'Personnalisé',
 ];

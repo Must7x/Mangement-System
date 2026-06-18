@@ -29,4 +29,7 @@ return [
     'end_date' => 'End date',
     'action' => 'Action',
     'recipient' => 'Recipient',
+    'slug' => 'Slug',
+    'user_count' => 'Users',
+    'type' => 'Type',
 ];

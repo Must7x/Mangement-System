@@ -45,10 +45,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="role" class="form-label">{{ __('fields.role') }}</label>
-                    <select name="role" id="role" required class="form-select">
+                    <label for="role_id" class="form-label">{{ __('fields.role') }}</label>
+                    <select name="role_id" id="role_id" required class="form-select">
                         @foreach ($roles as $role)
-                            <option value="{{ $role->value }}" @selected(old('role', $user?->role?->value) === $role->value)>
+                            <option value="{{ $role->id }}" @selected(old('role_id', $user?->role_id) == $role->id)>
                                 {{ $role->label() }}
                             </option>
                         @endforeach
