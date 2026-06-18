@@ -28,6 +28,7 @@ return [
     'start_date' => 'Start date',
     'end_date' => 'End date',
     'action' => 'Action',
+    'performed_by' => 'Performed by',
     'recipient' => 'Recipient',
     'slug' => 'Slug',
     'user_count' => 'Users',

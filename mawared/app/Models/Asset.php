@@ -44,6 +44,11 @@ class Asset extends Model
         return $this->hasMany(AssignmentHistory::class);
     }
 
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
     public function typeLabel(): string
     {
         return self::labelForType($this->type);

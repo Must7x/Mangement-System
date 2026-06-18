@@ -172,7 +172,7 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card" style="margin-bottom:1.25rem;">
         <div class="card-header">
             <h3 style="margin:0;font-size:1rem;font-weight:700;">
                 <i class="fa-solid fa-screwdriver-wrench" style="color:var(--color-mtnima-green);margin-left:0.5rem;"></i>
@@ -223,4 +223,46 @@
             </table>
         </div>
     </div>
+
+    @if (auth()->user()->hasPermission('activity_log.view'))
+    <div class="card">
+        <div class="card-header">
+            <h3 style="margin:0;font-size:1rem;font-weight:700;">
+                <i class="fa-solid fa-list-check" style="color:var(--color-mtnima-green);margin-left:0.5rem;"></i>
+                {{ __('messages.assets.sections.activity') }}
+            </h3>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>{{ __('tables.created_at') }}</th>
+                        <th>{{ __('tables.performed_by') }}</th>
+                        <th>{{ __('tables.role') }}</th>
+                        <th>{{ __('tables.action') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($activityLogs as $log)
+                        <tr>
+                            <td><span style="font-variant-numeric:tabular-nums;">{{ $log->created_at->format('Y/m/d H:i') }}</span></td>
+                            <td><strong>{{ $log->user_name }}</strong></td>
+                            <td>{{ $log->user_role }}</td>
+                            <td>{{ $log->description() }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <i class="fa-solid fa-list-check"></i>
+                                    <p>{{ __('messages.empty.no_activity_logs_for_asset') }}</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @endif
 @endsection

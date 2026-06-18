@@ -33,6 +33,8 @@ return [
 
         'assignment_history.view' => 'assignment_history',
 
+        'activity_log.view' => 'activity_log',
+
         'maintenance.view' => 'maintenance',
         'maintenance.create' => 'maintenance',
         'maintenance.update' => 'maintenance',
@@ -94,6 +96,8 @@ return [
 
         'assignment-history.index' => 'assignment_history.view',
 
+        'activity-log.index' => 'activity_log.view',
+
         'maintenances.index' => 'maintenance.view',
         'maintenances.create' => 'maintenance.create',
         'maintenances.store' => 'maintenance.create',
@@ -135,6 +139,7 @@ return [
             'roles.create',
             'roles.update',
             'roles.delete',
+            'activity_log.view',
         ],
         'inventory_supervisor' => [
             'dashboard.view',
@@ -146,6 +151,7 @@ return [
             'assignments.create',
             'assignments.return',
             'assignment_history.view',
+            'activity_log.view',
             'maintenance.view',
             'maintenance.create',
             'maintenance.update',

@@ -28,6 +28,7 @@ return [
     'start_date' => 'تاريخ البدء',
     'end_date' => 'تاريخ الانتهاء',
     'action' => 'إجراء',
+    'performed_by' => 'نُفِّذ بواسطة',
     'recipient' => 'الموظف المستلم',
     'slug' => 'المعرّف',
     'user_count' => 'المستخدمون',

@@ -6,6 +6,7 @@ return [
     'maintenances' => 'Maintenance Management',
     'assignments' => 'Assignment Management',
     'assignment_history' => 'Assignment History',
+    'activity_log' => 'Activity Log',
     'reports' => 'Reports',
     'departments' => 'Departments',
     'employees' => 'Employees',

@@ -6,6 +6,7 @@ return [
     'maintenances' => 'إدارة الصيانة',
     'assignments' => 'إدارة العهد',
     'assignment_history' => 'سجل العهد',
+    'activity_log' => 'سجل النشاط',
     'reports' => 'التقارير',
     'departments' => 'الأقسام',
     'employees' => 'الموظفون',

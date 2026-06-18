@@ -9,6 +9,7 @@ return [
         'assets' => 'Équipements',
         'assignments' => 'Affectations',
         'assignment_history' => 'Historique des affectations',
+        'activity_log' => 'Journal d\'activité',
         'maintenance' => 'Maintenance',
         'departments' => 'Départements',
         'employees' => 'Employés',
@@ -40,6 +41,8 @@ return [
     'assignments.return' => 'Retourner les affectations',
 
     'assignment_history.view' => 'Voir l\'historique des affectations',
+
+    'activity_log.view' => 'Voir le journal d\'activité',
 
     'maintenance.view' => 'Voir la maintenance',
     'maintenance.create' => 'Créer une maintenance',

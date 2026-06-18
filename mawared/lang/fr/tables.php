@@ -28,6 +28,7 @@ return [
     'start_date' => 'Date de début',
     'end_date' => 'Date de fin',
     'action' => 'Action',
+    'performed_by' => 'Effectué par',
     'recipient' => 'Employé destinataire',
     'slug' => 'Identifiant',
     'user_count' => 'Utilisateurs',

@@ -9,6 +9,7 @@ return [
         'assets' => 'المعدات',
         'assignments' => 'العهد',
         'assignment_history' => 'سجل العهد',
+        'activity_log' => 'سجل النشاط',
         'maintenance' => 'الصيانة',
         'departments' => 'الأقسام',
         'employees' => 'الموظفون',
@@ -40,6 +41,8 @@ return [
     'assignments.return' => 'سحب العهدة',
 
     'assignment_history.view' => 'عرض سجل العهد',
+
+    'activity_log.view' => 'عرض سجل النشاط',
 
     'maintenance.view' => 'عرض الصيانة',
     'maintenance.create' => 'فتح طلب صيانة',

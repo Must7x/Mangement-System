@@ -9,6 +9,7 @@ return [
         'assets' => 'Assets',
         'assignments' => 'Assignments',
         'assignment_history' => 'Assignment history',
+        'activity_log' => 'Activity log',
         'maintenance' => 'Maintenance',
         'departments' => 'Departments',
         'employees' => 'Employees',
@@ -40,6 +41,8 @@ return [
     'assignments.return' => 'Return assignments',
 
     'assignment_history.view' => 'View assignment history',
+
+    'activity_log.view' => 'View activity log',
 
     'maintenance.view' => 'View maintenance',
     'maintenance.create' => 'Create maintenance',

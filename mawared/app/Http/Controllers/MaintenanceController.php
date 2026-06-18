@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ActivityAction;
 use App\Enums\AssetStatus;
 use App\Enums\MaintenancePriority;
 use App\Enums\MaintenanceStatus;
 use App\Models\Asset;
 use App\Models\Maintenance;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -64,9 +66,15 @@ class MaintenanceController extends Controller
 
                 $this->assertAssetAvailableForMaintenance($asset);
 
-                Maintenance::create($validated);
+                $maintenance = Maintenance::create($validated);
 
                 $asset->update(['status' => AssetStatus::Maintenance]);
+
+                ActivityLogger::log(ActivityAction::MaintenanceCreated, $maintenance, $asset, [
+                    'asset_name' => $asset->name,
+                    'serial_number' => $asset->serial_number,
+                    'technician_name' => $maintenance->technician_name,
+                ]);
             });
         } catch (\RuntimeException $exception) {
             return back()
@@ -100,6 +108,14 @@ class MaintenanceController extends Controller
 
         $maintenance->update($validated);
 
+        $maintenance->load('asset');
+
+        ActivityLogger::log(ActivityAction::MaintenanceUpdated, $maintenance, $maintenance->asset, [
+            'asset_name' => $maintenance->asset?->name ?? '',
+            'serial_number' => $maintenance->asset?->serial_number ?? '',
+            'technician_name' => $maintenance->technician_name,
+        ]);
+
         return redirect()
             ->route('maintenances.index')
             ->with('success', __('messages.success.maintenance_updated'));
@@ -123,6 +139,12 @@ class MaintenanceController extends Controller
             ]);
 
             $asset->update(['status' => AssetStatus::Warehouse]);
+
+            ActivityLogger::log(ActivityAction::MaintenanceCompleted, $maintenance, $asset, [
+                'asset_name' => $asset->name,
+                'serial_number' => $asset->serial_number,
+                'technician_name' => $maintenance->technician_name,
+            ]);
         });
 
         return redirect()
@@ -148,6 +170,12 @@ class MaintenanceController extends Controller
             ]);
 
             $asset->update(['status' => AssetStatus::Warehouse]);
+
+            ActivityLogger::log(ActivityAction::MaintenanceCancelled, $maintenance, $asset, [
+                'asset_name' => $asset->name,
+                'serial_number' => $asset->serial_number,
+                'technician_name' => $maintenance->technician_name,
+            ]);
         });
 
         return redirect()

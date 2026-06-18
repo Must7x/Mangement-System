@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AssignmentHistoryController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\AssetController;
@@ -117,6 +118,10 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('permission:assignment_history.view')->group(function () {
         Route::get('/assignment-history', [AssignmentHistoryController::class, 'index'])->name('assignment-history.index');
+    });
+
+    Route::middleware('permission:activity_log.view')->group(function () {
+        Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
     });
 
     Route::middleware('permission:reports.view')->group(function () {

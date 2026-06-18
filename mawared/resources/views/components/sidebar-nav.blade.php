@@ -33,6 +33,10 @@
         $items[] = ['route' => 'assignment-history.index', 'pattern' => 'assignment-history.*', 'icon' => 'fa-clock-rotate-left', 'label' => __('nav.assignment_history')];
     }
 
+    if (auth()->user()->hasPermission('activity_log.view')) {
+        $items[] = ['route' => 'activity-log.index', 'pattern' => 'activity-log.*', 'icon' => 'fa-list-check', 'label' => __('nav.activity_log')];
+    }
+
     if (auth()->user()->hasPermission('reports.view')) {
         $items[] = ['route' => 'reports.index', 'pattern' => 'reports*', 'icon' => 'fa-chart-column', 'label' => __('nav.reports')];
     }

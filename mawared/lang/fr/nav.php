@@ -6,6 +6,7 @@ return [
     'maintenances' => 'Gestion de la maintenance',
     'assignments' => 'Gestion des affectations',
     'assignment_history' => 'Historique des affectations',
+    'activity_log' => 'Journal d\'activité',
     'reports' => 'Rapports',
     'departments' => 'Départements',
     'employees' => 'Employés',

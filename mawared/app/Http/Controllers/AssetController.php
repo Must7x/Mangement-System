@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ActivityAction;
 use App\Enums\AssetStatus;
 use App\Models\Asset;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -27,7 +29,12 @@ class AssetController extends Controller
             return $error;
         }
 
-        Asset::create($validated);
+        $asset = Asset::create($validated);
+
+        ActivityLogger::log(ActivityAction::AssetCreated, $asset, $asset, [
+            'asset_name' => $asset->name,
+            'serial_number' => $asset->serial_number,
+        ]);
 
         return redirect()
             ->route('inventory.index')
@@ -52,7 +59,15 @@ class AssetController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('assets.show', compact('asset', 'assignmentHistories', 'maintenances'));
+        $activityLogs = auth()->user()->hasPermission('activity_log.view')
+            ? $asset->activityLogs()
+                ->with(['user.assignedRole', 'asset'])
+                ->orderByDesc('created_at')
+                ->orderByDesc('id')
+                ->get()
+            : collect();
+
+        return view('assets.show', compact('asset', 'assignmentHistories', 'maintenances', 'activityLogs'));
     }
 
     public function edit(Asset $asset): View
@@ -89,6 +104,11 @@ class AssetController extends Controller
 
         $asset->update($validated);
 
+        ActivityLogger::log(ActivityAction::AssetUpdated, $asset, $asset, [
+            'asset_name' => $asset->name,
+            'serial_number' => $asset->serial_number,
+        ]);
+
         return redirect()
             ->route('inventory.index')
             ->with('success', __('messages.success.asset_updated'));
@@ -103,6 +123,11 @@ class AssetController extends Controller
         if ($asset->openMaintenance()->exists()) {
             return back()->withErrors(['asset' => __('messages.errors.asset_cannot_delete_open_maintenance')]);
         }
+
+        ActivityLogger::log(ActivityAction::AssetDeleted, $asset, $asset, [
+            'asset_name' => $asset->name,
+            'serial_number' => $asset->serial_number,
+        ]);
 
         $asset->delete();
 

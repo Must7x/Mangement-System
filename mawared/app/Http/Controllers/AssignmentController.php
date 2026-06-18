@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ActivityAction;
 use App\Enums\AssetStatus;
 use App\Models\Asset;
 use App\Models\Assignment;
 use App\Models\AssignmentHistory;
 use App\Models\Employee;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -58,7 +60,7 @@ class AssignmentController extends Controller
                     ->whereKey($validated['employee_id'])
                     ->firstOrFail();
 
-                Assignment::create([
+                $assignment = Assignment::create([
                     ...$validated,
                     'employee_name' => $employee->name,
                     'department' => $employee->department?->name ?? '',
@@ -73,6 +75,12 @@ class AssignmentController extends Controller
                 ]);
 
                 $asset->update(['status' => AssetStatus::Active]);
+
+                ActivityLogger::log(ActivityAction::AssignmentCreated, $assignment, $asset, [
+                    'asset_name' => $asset->name,
+                    'employee_name' => $employee->name,
+                    'serial_number' => $asset->serial_number,
+                ]);
             });
         } catch (\RuntimeException $exception) {
             return back()
@@ -89,12 +97,19 @@ class AssignmentController extends Controller
     {
         $employeeId = $assignment->employee_id;
         $assignedDate = $assignment->assigned_date;
+        $employeeName = $assignment->employee_name;
 
-        DB::transaction(function () use ($assignment, $employeeId, $assignedDate): void {
+        DB::transaction(function () use ($assignment, $employeeId, $assignedDate, $employeeName): void {
             $asset = Asset::query()
                 ->whereKey($assignment->asset_id)
                 ->lockForUpdate()
                 ->firstOrFail();
+
+            ActivityLogger::log(ActivityAction::AssignmentReturned, $assignment, $asset, [
+                'asset_name' => $asset->name,
+                'employee_name' => $employeeName,
+                'serial_number' => $asset->serial_number,
+            ]);
 
             $assignment->delete();
 
