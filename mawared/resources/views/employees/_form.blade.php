@@ -42,7 +42,7 @@
                 </button>
             </form>
 
-            @if ($employee)
+            @if ($employee && auth()->user()->hasPermission('employees.delete'))
                 <form method="POST" action="{{ route('employees.destroy', $employee) }}"
                       onsubmit="return confirm(@json(__('messages.confirms.delete_employee')));"
                       style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--color-border);">

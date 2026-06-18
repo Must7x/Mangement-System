@@ -146,9 +146,9 @@ return [
     ],
     'profile' => [
         'permissions' => [
-            'admin' => 'Full permissions: asset management, deletion, and system oversight.',
-            'supervisor' => 'Inventory supervisor: full operational access and org structure management.',
-            'storekeeper' => 'Warehouse management: register assets, assign custody, and revoke assignments.',
+            'admin' => 'Manages users, roles, permissions, and system settings. No operational inventory access.',
+            'supervisor' => 'Full operational management: assets, assignments, maintenance, departments, employees, and reports.',
+            'storekeeper' => 'Daily operations: register assets, assign and revoke custody, maintenance, and reports. No asset deletion or org structure management.',
         ],
     ],
     'roles' => [

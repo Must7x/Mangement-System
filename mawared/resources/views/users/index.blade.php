@@ -8,9 +8,11 @@
         subtitle="{{ __('pages.users_subtitle') }}"
     >
         <x-slot:actions>
+            @if (auth()->user()->hasPermission('users.create'))
             <a href="{{ route('users.create') }}" class="btn btn-primary">
                 <i class="fa-solid fa-user-plus"></i> {{ __('actions.add_user') }}
             </a>
+            @endif
         </x-slot:actions>
     </x-page-header>
 
@@ -43,9 +45,11 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->roleLabel() }}</td>
                             <td>
+                                @if (auth()->user()->hasPermission('users.update'))
                                 <a href="{{ route('users.edit', $user) }}" class="link-action">
                                     <i class="fa-solid fa-pen"></i> {{ __('actions.edit') }}
                                 </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

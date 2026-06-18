@@ -95,6 +95,7 @@
 
             @if ($maintenance && $maintenance->isOpen())
                 <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--color-border);display:flex;flex-wrap:gap:0.75rem;">
+                    @if (auth()->user()->hasPermission('maintenance.complete'))
                     <form method="POST" action="{{ route('maintenances.complete', $maintenance) }}"
                           onsubmit="return confirm(@json(__('messages.confirms.complete_maintenance')));">
                         @csrf
@@ -102,6 +103,8 @@
                             <i class="fa-solid fa-circle-check"></i> {{ __('actions.complete_maintenance') }}
                         </button>
                     </form>
+                    @endif
+                    @if (auth()->user()->hasPermission('maintenance.cancel'))
                     <form method="POST" action="{{ route('maintenances.cancel', $maintenance) }}"
                           onsubmit="return confirm(@json(__('messages.confirms.cancel_maintenance')));">
                         @csrf
@@ -109,6 +112,7 @@
                             <i class="fa-solid fa-ban"></i> {{ __('actions.cancel_maintenance') }}
                         </button>
                     </form>
+                    @endif
                 </div>
             @endif
         </div>

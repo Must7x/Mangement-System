@@ -11,9 +11,11 @@
             <a href="{{ route('inventory.index') }}" class="btn btn-ghost">
                 <i class="fa-solid fa-arrow-right"></i> {{ __('actions.inventory_back') }}
             </a>
+            @if (auth()->user()->hasPermission('assets.update'))
             <a href="{{ route('assets.edit', $asset) }}" class="btn btn-primary">
                 <i class="fa-solid fa-pen-to-square"></i> {{ __('actions.edit') }}
             </a>
+            @endif
         </x-slot:actions>
     </x-page-header>
 

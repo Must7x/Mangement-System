@@ -8,6 +8,7 @@
         subtitle="{{ __('pages.assignments_subtitle') }}"
     >
         <x-slot:actions>
+            @if (auth()->user()->hasPermission('assignments.create'))
             <button type="button"
                     id="open-assign-modal"
                     @disabled($warehouseAssets->isEmpty() || $employees->isEmpty())
@@ -16,6 +17,7 @@
                 <i class="fa-solid fa-file-circle-plus"></i>
                 {{ __('actions.new_assignment') }}
             </button>
+            @endif
         </x-slot:actions>
     </x-page-header>
 
@@ -74,11 +76,14 @@
                             </td>
                             <td>
                                 <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                                    @if (auth()->user()->hasPermission('custody_receipts.view'))
                                     <a href="{{ route('assignments.receipt', $assignment) }}"
                                        target="_blank"
                                        class="btn btn-ghost btn-sm">
                                         <i class="fa-solid fa-print"></i> {{ __('actions.custody_receipt') }}
                                     </a>
+                                    @endif
+                                    @if (auth()->user()->hasPermission('assignments.return'))
                                     <form method="POST"
                                           action="{{ route('assignments.destroy', $assignment) }}"
                                           onsubmit="return confirm(@json(__('messages.confirms.revoke_assignment')));">
@@ -88,6 +93,7 @@
                                             <i class="fa-solid fa-rotate-left"></i> {{ __('actions.revoke_assignment') }}
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -97,7 +103,7 @@
                                 <div class="empty-state">
                                     <i class="fa-solid fa-file-signature"></i>
                                     <p>{{ __('messages.empty.no_active_assignments') }}</p>
-                                    @if ($warehouseAssets->isNotEmpty() && $employees->isNotEmpty())
+                                    @if ($warehouseAssets->isNotEmpty() && $employees->isNotEmpty() && auth()->user()->hasPermission('assignments.create'))
                                         <button type="button" id="open-assign-modal-empty" class="btn btn-primary" style="margin-top:1rem;">
                                             {{ __('actions.first_assignment') }}
                                         </button>
@@ -111,6 +117,7 @@
         </div>
     </div>
 
+    @if (auth()->user()->hasPermission('assignments.create'))
     <div id="assign-modal" class="hidden">
         <div class="modal-backdrop" data-close-modal></div>
         <div class="modal-panel">
@@ -163,9 +170,11 @@
             </div>
         </div>
     </div>
+    @endif
 @endsection
 
 @push('scripts')
+@if (auth()->user()->hasPermission('assignments.create'))
 <script>
     const modalRoot = document.getElementById('assign-modal');
     const backdrop = modalRoot?.querySelector('.modal-backdrop');
@@ -198,4 +207,5 @@
         openModal();
     @endif
 </script>
+@endif
 @endpush

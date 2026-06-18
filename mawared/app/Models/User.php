@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Schema;
 
 #[Fillable(['name', 'first_name', 'last_name', 'phone', 'job_title', 'employee_number', 'email', 'password', 'role_id'])]
 #[Hidden(['password', 'remember_token'])]
@@ -40,10 +39,6 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Named assignedRole to avoid collision with the legacy users.role string column
-     * during migration. Use resolvedRole() for safe access.
-     */
     public function assignedRole(): BelongsTo
     {
         return $this->belongsTo(Role::class, 'role_id');
@@ -82,8 +77,6 @@ class User extends Authenticatable
         if ($role) {
             $role->loadMissing('permissions');
             $this->cachedPermissionSlugs = $role->permissions->pluck('slug')->all();
-        } elseif ($slug = $this->legacyRoleSlug()) {
-            $this->cachedPermissionSlugs = config("permissions.system_roles.{$slug}", []);
         } else {
             $this->cachedPermissionSlugs = [];
         }
@@ -93,7 +86,7 @@ class User extends Authenticatable
 
     public function roleSlug(): ?string
     {
-        return $this->resolvedRole()?->slug ?? $this->legacyRoleSlug();
+        return $this->resolvedRole()?->slug;
     }
 
     public function isTechnicalAdmin(): bool
@@ -181,37 +174,17 @@ class User extends Authenticatable
 
     public function roleLabel(): string
     {
-        return $this->resolvedRole()?->label()
-            ?? ($this->legacyRoleSlug() ? __("roles.{$this->legacyRoleSlug()}") : __('common.em_dash'));
+        return $this->resolvedRole()?->label() ?? __('common.em_dash');
     }
 
     private function resolvedRole(): ?Role
     {
-        if (! Schema::hasTable('roles')) {
+        if (! $this->role_id) {
             return null;
         }
 
-        if ($this->role_id) {
-            $this->loadMissing('assignedRole');
+        $this->loadMissing('assignedRole');
 
-            return $this->assignedRole;
-        }
-
-        if ($slug = $this->legacyRoleSlug()) {
-            return Role::query()->where('slug', $slug)->first();
-        }
-
-        return null;
-    }
-
-    private function legacyRoleSlug(): ?string
-    {
-        if (! Schema::hasColumn('users', 'role')) {
-            return null;
-        }
-
-        $value = $this->attributes['role'] ?? null;
-
-        return is_string($value) && $value !== '' ? $value : null;
+        return $this->assignedRole;
     }
 }

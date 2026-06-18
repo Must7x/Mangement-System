@@ -1,34 +1,48 @@
 @startuml mawared-erd
-' MTNIMA — Mawared Entity-Relationship Diagram
-' Render: PlantUML / VS Code PlantUML extension / plantuml.com
+' MTNIMA — Mawared ERD (Dynamic RBAC)
 
 skinparam linetype ortho
 skinparam shadowing false
-skinparam defaultFontName Arial
-skinparam class {
-  BackgroundColor #FEFEFE
-  BorderColor #334155
-  ArrowColor #334155
-}
 
 title Mawared — Entity-Relationship Diagram
 
-legend right
-  |= Notation |= Meaning |
-  | * | Primary key |
-  | FK | Foreign key |
-  | UK | Unique constraint |
-  | (nullable) | Optional FK / column |
-endlegend
+entity "roles" as roles {
+  * **id** : bigint <<PK>>
+  --
+  * name : varchar
+  * slug : varchar <<UK>>
+  description : text (nullable)
+  * is_system : boolean
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "permissions" as permissions {
+  * **id** : bigint <<PK>>
+  --
+  * slug : varchar <<UK>>
+  * group : varchar
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "role_permission" as role_permission {
+  * **role_id** : bigint <<PK, FK>>
+  * **permission_id** : bigint <<PK, FK>>
+}
 
 entity "users" as users {
   * **id** : bigint <<PK>>
   --
   * name : varchar
+  * first_name : varchar
+  * last_name : varchar
+  phone : varchar
+  job_title : varchar (nullable)
+  employee_number : varchar (nullable)
   * email : varchar <<UK>>
-  email_verified_at : timestamp (nullable)
+  * role_id : bigint <<FK>>
   * password : varchar
-  * role : varchar
   remember_token : varchar (nullable)
   created_at : timestamp
   updated_at : timestamp
@@ -39,8 +53,6 @@ entity "departments" as departments {
   --
   * name : varchar
   deleted_at : timestamp (nullable)
-  created_at : timestamp
-  updated_at : timestamp
 }
 
 entity "employees" as employees {
@@ -49,8 +61,6 @@ entity "employees" as employees {
   * name : varchar
   department_id : bigint <<FK>> (nullable)
   deleted_at : timestamp (nullable)
-  created_at : timestamp
-  updated_at : timestamp
 }
 
 entity "assets" as assets {
@@ -60,8 +70,6 @@ entity "assets" as assets {
   * type : varchar
   * serial_number : varchar <<UK>>
   * status : varchar
-  created_at : timestamp
-  updated_at : timestamp
 }
 
 entity "assignments" as assignments {
@@ -72,21 +80,15 @@ entity "assignments" as assignments {
   * employee_name : varchar
   * department : varchar
   * assigned_date : date
-  created_at : timestamp
-  updated_at : timestamp
 }
 
 entity "assignment_histories" as assignment_histories {
   * **id** : bigint <<PK>>
   --
   asset_id : bigint <<FK>> (nullable)
-  employee_id : bigint <<FK>> (nullable)
-  * employee_name : varchar
-  department_name : varchar (nullable)
-  * assigned_date : date
+  employee_name : varchar
+  assigned_date : date
   returned_date : date (nullable)
-  created_at : timestamp
-  updated_at : timestamp
 }
 
 entity "maintenances" as maintenances {
@@ -99,35 +101,21 @@ entity "maintenances" as maintenances {
   * status : varchar
   * maintenance_start_date : date
   maintenance_end_date : date (nullable)
-  notes : text (nullable)
-  created_at : timestamp
-  updated_at : timestamp
 }
 
-' --- Relationships ---
+roles ||--o{ role_permission
+permissions ||--o{ role_permission
+roles ||--o{ users : role_id
+departments ||--o{ employees
+employees ||--o{ assignments
+assets ||--|| assignments
+assets ||--o{ maintenances
+assets ||--o{ assignment_histories
 
-departments ||--o{ employees : "department_id\n(nullOnDelete)"
-employees ||--o{ assignments : "employee_id\n(nullOnDelete)"
-assets ||--|| assignments : "asset_id\n(cascadeOnDelete, unique)"
-assets ||--o{ maintenances : "asset_id\n(cascadeOnDelete)"
-assets ||--o{ assignment_histories : "asset_id\n(nullOnDelete)"
-employees ||--o{ assignment_histories : "employee_id\n(nullOnDelete)"
-
-note bottom of users
-  Standalone auth table.
-  No FK to operational entities.
-end note
-
-note bottom of assignments
-  One active assignment per asset
-  (unique asset_id).
-  employee_name / department kept
-  as denormalized snapshot fields.
-end note
-
-note bottom of assignment_histories
-  Archive of assign / return events.
-  department_name is denormalized text.
+note bottom of roles
+  System slugs: technical_admin,
+  inventory_supervisor, warehouse_keeper
+  Custom roles: is_system = false
 end note
 
 @enduml

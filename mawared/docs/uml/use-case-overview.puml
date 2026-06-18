@@ -1,5 +1,5 @@
 @startuml mawared-use-case-overview
-' High-level use cases mapped to actors
+' High-level use cases mapped to actors (Dynamic RBAC)
 
 left to right direction
 skinparam packageStyle rectangle
@@ -18,8 +18,15 @@ rectangle "Mawared" {
     usecase "Login / Logout" as UC1
   }
 
+  package "Administration" {
+    usecase "Manage user accounts" as UC12
+    usecase "Manage roles & permissions" as UC14
+    usecase "View settings hub" as UC15
+  }
+
   package "Inventory" {
     usecase "Register & edit assets" as UC2
+    usecase "Delete assets" as UC2b
     usecase "View Asset 360" as UC3
   }
 
@@ -27,6 +34,7 @@ rectangle "Mawared" {
     usecase "Assign asset to employee" as UC4
     usecase "Withdraw assignment" as UC5
     usecase "View assignment history" as UC6
+    usecase "Print custody receipt" as UC6b
   }
 
   package "Maintenance" {
@@ -40,37 +48,27 @@ rectangle "Mawared" {
     usecase "Manage employee records" as UC11
   }
 
-  package "Administration" {
-    usecase "Manage user accounts" as UC12
+  package "Reporting" {
     usecase "View dashboard & reports" as UC13
   }
 
 }
 
-' --- System login actors ---
-
 TA --> UC1
 IS --> UC1
 WK --> UC1
 
-TA --> UC2
-TA --> UC3
-TA --> UC4
-TA --> UC5
-TA --> UC6
-TA --> UC7
-TA --> UC8
-TA --> UC9
-TA --> UC10
-TA --> UC11
 TA --> UC12
-TA --> UC13
+TA --> UC14
+TA --> UC15
 
 IS --> UC2
+IS --> UC2b
 IS --> UC3
 IS --> UC4
 IS --> UC5
 IS --> UC6
+IS --> UC6b
 IS --> UC7
 IS --> UC8
 IS --> UC9
@@ -83,14 +81,11 @@ WK --> UC3
 WK --> UC4
 WK --> UC5
 WK --> UC6
+WK --> UC6b
 WK --> UC7
 WK --> UC8
 WK --> UC9
-WK --> UC10
-WK --> UC11
 WK --> UC13
-
-' --- Operational actors (no login) ---
 
 DM ..> UC10 : <<operational>>
 EM ..> UC4 : <<operational>>
@@ -100,9 +95,9 @@ MT ..> UC7 : <<operational>>
 MT ..> UC9 : <<operational>>
 
 note as N1
-  **Login accounts:** Technical Administrator, Inventory Supervisor, Warehouse Keeper.
-  **Operational actors (no login):** Department Manager, Employee, Maintenance Technician —
-  represented in departments, employees, and maintenance records.
+  **Login roles:** technical_admin, inventory_supervisor, warehouse_keeper
+  **Custom roles:** created by Technical Administrator via /roles
+  **Authorization:** permissions table + EnsurePermission middleware
 end note
 
 @enduml

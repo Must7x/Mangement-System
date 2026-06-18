@@ -76,7 +76,7 @@
                 </button>
             </form>
 
-            @if ($user && $user->id !== auth()->id())
+            @if ($user && $user->id !== auth()->id() && auth()->user()->hasPermission('users.delete'))
                 <form method="POST" action="{{ route('users.destroy', $user) }}"
                       onsubmit="return confirm(@json(__('messages.confirms.delete_user')));"
                       style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--color-border);">

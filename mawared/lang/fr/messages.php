@@ -146,9 +146,9 @@ return [
     ],
     'profile' => [
         'permissions' => [
-            'admin' => 'Permissions complètes : gestion des équipements, suppression et supervision du système.',
-            'supervisor' => 'Superviseur des stocks : accès opérationnel complet et gestion de la structure organisationnelle.',
-            'storekeeper' => 'Gestion de l\'entrepôt : enregistrer les équipements, affecter la garde et retirer les affectations.',
+            'admin' => 'Gestion des utilisateurs, rôles, permissions et paramètres système. Pas d\'accès opérationnel à l\'inventaire.',
+            'supervisor' => 'Gestion opérationnelle complète : équipements, affectations, maintenance, départements, employés et rapports.',
+            'storekeeper' => 'Opérations quotidiennes : enregistrement, affectation et retour de garde, maintenance et rapports. Pas de suppression d\'équipements ni de gestion organisationnelle.',
         ],
     ],
     'roles' => [

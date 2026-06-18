@@ -23,7 +23,7 @@
                 </button>
             </form>
 
-            @if ($department)
+            @if ($department && auth()->user()->hasPermission('departments.delete'))
                 <form method="POST" action="{{ route('departments.destroy', $department) }}"
                       onsubmit="return confirm(@json(__('messages.confirms.delete_department')));"
                       style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--color-border);">

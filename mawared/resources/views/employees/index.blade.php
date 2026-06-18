@@ -8,9 +8,11 @@
         subtitle="{{ __('pages.employees_subtitle') }}"
     >
         <x-slot:actions>
+            @if (auth()->user()->hasPermission('employees.create'))
             <a href="{{ route('employees.create') }}" class="btn btn-primary">
                 <i class="fa-solid fa-plus"></i> {{ __('actions.add_employee') }}
             </a>
+            @endif
         </x-slot:actions>
     </x-page-header>
 
@@ -34,9 +36,11 @@
                             <td>{{ __('messages.employees.assignment_count', ['count' => $employee->assignments_count]) }}</td>
                             <td>{{ $employee->created_at->format('Y-m-d') }}</td>
                             <td>
+                                @if (auth()->user()->hasPermission('employees.update'))
                                 <a href="{{ route('employees.edit', $employee) }}" class="link-action">
                                     <i class="fa-solid fa-pen"></i> {{ __('actions.edit') }}
                                 </a>
+                                @endif
                             </td>
                         </tr>
                     @empty

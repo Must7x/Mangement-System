@@ -1,6 +1,5 @@
 @startuml mawared-actors
-' MTNIMA — Mawared System Actors
-' Render: PlantUML / VS Code PlantUML extension / plantuml.com
+' MTNIMA — Mawared System Actors (Dynamic RBAC)
 
 skinparam actorStyle awesome
 skinparam shadowing false
@@ -10,11 +9,12 @@ title Mawared — System & Operational Actors
 
 legend right
   |= Color |= Meaning |
-  | <#E8F5E9> | **System login actor** — has `users` account |
-  | <#E3F2FD> | **Operational actor** — no login; represented in records/workflows |
+  | <#E8F5E9> | **System login actor** — users.role_id |
+  | <#E3F2FD> | **Operational actor** — no login |
 endlegend
 
 actor "Technical Administrator\n(Mas'ool Taqni)" as TA #E8F5E9
+actor "Inventory Supervisor\n(Mushrif al-Makhzun)" as IS #E8F5E9
 actor "Warehouse Keeper\n(Ameen al-Makhzan)" as WK #E8F5E9
 
 actor "Department Manager\n(Mudeer al-Qism)" as DM #E3F2FD
@@ -24,67 +24,56 @@ actor "Maintenance Technician\n(Fanni al-Siyana)" as MT #E3F2FD
 rectangle "Mawared Application\n(Laravel — MTNIMA)" as SYS {
 
   usecase "Authenticate\n(/login)" as UC_LOGIN
-  usecase "Manage system users\n(/users)" as UC_USERS
+  usecase "Manage users\n(/users)" as UC_USERS
+  usecase "Manage roles & permissions\n(/roles)" as UC_ROLES
+  usecase "System settings\n(/settings)" as UC_SETTINGS
   usecase "Manage inventory & assets" as UC_INV
   usecase "Manage assignments" as UC_ASSIGN
   usecase "Manage maintenance" as UC_MAINT
   usecase "Manage departments" as UC_DEPT
   usecase "Manage employee records" as UC_EMP
-  usecase "View reports & history" as UC_REPORT
+  usecase "View dashboard & reports" as UC_REPORT
 
 }
 
 TA --> UC_LOGIN
+IS --> UC_LOGIN
 WK --> UC_LOGIN
 
 TA --> UC_USERS
-TA --> UC_INV
-TA --> UC_ASSIGN
-TA --> UC_MAINT
-TA --> UC_DEPT
-TA --> UC_EMP
-TA --> UC_REPORT
+TA --> UC_ROLES
+TA --> UC_SETTINGS
+
+IS --> UC_INV
+IS --> UC_ASSIGN
+IS --> UC_MAINT
+IS --> UC_DEPT
+IS --> UC_EMP
+IS --> UC_REPORT
 
 WK --> UC_INV
 WK --> UC_ASSIGN
 WK --> UC_MAINT
-WK --> UC_DEPT
-WK --> UC_EMP
 WK --> UC_REPORT
 
-DM ..> UC_DEPT : <<represented by>>\ndepartments table
-EM ..> UC_ASSIGN : <<represented by>>\nemployees table +\nassignment records
+DM ..> UC_DEPT : <<operational>>\ndepartments table
+EM ..> UC_ASSIGN : <<operational>>\nemployees table
 EM ..> UC_EMP
-MT ..> UC_MAINT : <<represented by>>\ntechnician_name field\nin maintenances
+MT ..> UC_MAINT : <<operational>>\ntechnician_name
 
 note bottom of TA
-  **System login actor**
-  DB role: technical_admin
-  Full access including /users
+  **System role:** technical_admin
+  Users, roles, permissions, settings only
+end note
+
+note bottom of IS
+  **System role:** inventory_supervisor
+  Full operational access + org structure
 end note
 
 note bottom of WK
-  **System login actor**
-  DB role: warehouse_keeper
-  Operational modules except user admin
-end note
-
-note bottom of DM
-  **Operational actor (no login)**
-  Organizational context via departments;
-  not a users table role today
-end note
-
-note bottom of EM
-  **Operational actor (no login)**
-  Stored in employees;
-  linked to assignments & history
-end note
-
-note bottom of MT
-  **Operational actor (no login)**
-  Captured as free-text technician_name
-  on maintenance requests
+  **System role:** warehouse_keeper
+  Daily ops — no asset delete or org CRUD
 end note
 
 @enduml

@@ -41,22 +41,30 @@
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(10rem,1fr));gap:0.75rem;margin-bottom:1.5rem;">
+        @if (auth()->user()->hasPermission('assets.view'))
         <a href="{{ route('inventory.index') }}" class="card" style="padding:1rem;text-decoration:none;color:inherit;text-align:center;transition:box-shadow 0.2s;">
             <i class="fa-solid fa-warehouse" style="font-size:1.5rem;color:var(--color-mtnima-green);margin-bottom:0.5rem;"></i>
             <p style="margin:0;font-weight:600;font-size:0.875rem;">{{ __('messages.dashboard.quick_links.inventory') }}</p>
         </a>
+        @endif
+        @if (auth()->user()->hasPermission('assignments.view'))
         <a href="{{ route('assignments.index') }}" class="card" style="padding:1rem;text-decoration:none;color:inherit;text-align:center;">
             <i class="fa-solid fa-handshake" style="font-size:1.5rem;color:var(--color-mtnima-green);margin-bottom:0.5rem;"></i>
             <p style="margin:0;font-weight:600;font-size:0.875rem;">{{ __('messages.dashboard.quick_links.assignments') }}</p>
         </a>
+        @endif
+        @if (auth()->user()->hasPermission('reports.view'))
         <a href="{{ route('reports.index') }}" class="card" style="padding:1rem;text-decoration:none;color:inherit;text-align:center;">
             <i class="fa-solid fa-chart-column" style="font-size:1.5rem;color:var(--color-mtnima-green);margin-bottom:0.5rem;"></i>
             <p style="margin:0;font-weight:600;font-size:0.875rem;">{{ __('messages.dashboard.quick_links.reports') }}</p>
         </a>
+        @endif
+        @if (auth()->user()->hasPermission('assets.create'))
         <a href="{{ route('assets.create') }}" class="card" style="padding:1rem;text-decoration:none;color:inherit;text-align:center;">
             <i class="fa-solid fa-plus" style="font-size:1.5rem;color:var(--color-mtnima-gold);margin-bottom:0.5rem;"></i>
             <p style="margin:0;font-weight:600;font-size:0.875rem;">{{ __('messages.dashboard.quick_links.add_asset') }}</p>
         </a>
+        @endif
     </div>
 
     <div class="card">

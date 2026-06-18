@@ -8,9 +8,11 @@
         subtitle="{{ __('pages.maintenances_subtitle') }}"
     >
         <x-slot:actions>
+            @if (auth()->user()->hasPermission('maintenance.create'))
             <a href="{{ route('maintenances.create') }}" class="btn btn-primary">
                 <i class="fa-solid fa-plus"></i> {{ __('actions.add_maintenance') }}
             </a>
+            @endif
         </x-slot:actions>
     </x-page-header>
 
@@ -88,7 +90,7 @@
                             </td>
                             <td><strong>{{ $maintenance->durationLabel() }}</strong></td>
                             <td>
-                                @if ($maintenance->isOpen())
+                                @if ($maintenance->isOpen() && auth()->user()->hasPermission('maintenance.update'))
                                     <a href="{{ route('maintenances.edit', $maintenance) }}" class="link-action">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>

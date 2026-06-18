@@ -8,9 +8,11 @@
         subtitle="{{ __('pages.inventory_subtitle') }}"
     >
         <x-slot:actions>
+            @if (auth()->user()->hasPermission('assets.create'))
             <a href="{{ route('assets.create') }}" class="btn btn-accent">
                 <i class="fa-solid fa-plus"></i> {{ __('actions.add_asset') }}
             </a>
+            @endif
         </x-slot:actions>
     </x-page-header>
 
@@ -74,9 +76,11 @@
                                     <a href="{{ route('assets.show', $asset) }}" class="link-action">
                                         <i class="fa-solid fa-eye"></i> {{ __('actions.view') }}
                                     </a>
+                                    @if (auth()->user()->hasPermission('assets.update'))
                                     <a href="{{ route('assets.edit', $asset) }}" class="link-action">
                                         <i class="fa-solid fa-pen-to-square"></i> {{ __('actions.edit') }}
                                     </a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -86,7 +90,9 @@
                                 <div class="empty-state">
                                     <i class="fa-solid fa-inbox"></i>
                                     <p>{{ __('messages.empty.no_registered_assets') }}</p>
+                                    @if (auth()->user()->hasPermission('assets.create'))
                                     <a href="{{ route('assets.create') }}" class="btn btn-primary" style="margin-top:1rem;">{{ __('actions.register_first_asset') }}</a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

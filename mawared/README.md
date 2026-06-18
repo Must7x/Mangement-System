@@ -30,8 +30,9 @@
 | **التقارير** | `/reports` | تحليلات وإحصائيات |
 | **الأقسام** | `/departments` | CRUD للأقسام الإدارية |
 | **الموظفون** | `/employees` | CRUD للموظفين وربطهم بالأقسام |
-| **إدارة المستخدمين** | `/users` | CRUD للحسابات *(المسؤول التقني فقط)* |
-| **الإعدادات** | `/settings` | إعدادات النظام |
+| **إدارة المستخدمين** | `/users` | CRUD للحسابات *(المسؤول التقني)* |
+| **إدارة الأدوار** | `/roles` | إنشاء أدوار مخصصة وتعيين الصلاحيات *(المسؤول التقني)* |
+| **الإعدادات** | `/settings` | مركز الإدارة: الأدوار، فهرس الصلاحيات، معلومات النظام |
 | **الملف الشخصي** | `/profile` | بيانات المستخدم والدور |
 
 ### محرك الحالة الآلي
@@ -124,29 +125,35 @@
 
 | الممثل | Actor | حساب دخول | تمثيل في النظام |
 |--------|-------|-----------|-----------------|
-| **المسؤول التقني** | Technical Administrator | ✅ نعم | `users.role = technical_admin` |
-| **أمين المخزن** | Warehouse Keeper | ✅ نعم | `users.role = warehouse_keeper` |
+| **المسؤول التقني** | Technical Administrator | ✅ نعم | `users.role_id` → `roles.slug = technical_admin` |
+| **مشرف المخزون** | Inventory Supervisor | ✅ نعم | `users.role_id` → `roles.slug = inventory_supervisor` |
+| **أمين المخزن** | Warehouse Keeper | ✅ نعم | `users.role_id` → `roles.slug = warehouse_keeper` |
 | **مدير القسم** | Department Manager | ❌ لا | سجلات `departments` |
 | **الموظف** | Employee | ❌ لا | سجلات `employees` + العهد |
 | **فني الصيانة** | Maintenance Technician | ❌ لا | `maintenances.technician_name` |
 
-> **فقط** المسؤول التقني وأمين المخزن لديهما حسابات دخول (`/login`) حالياً.  
-> مدير القسم والموظف وفني الصيانة **ممثلون تشغيليون** — يُدارون عبر السجلات وسير العمل من قبل المستخدمين المسجّلين.
+> **ثلاثة** أدوار دخول نظامية (+ أدوار مخصصة): المسؤول التقني، مشرف المخزون، وأمين المخزن.  
+> مدير القسم والموظف وفني الصيانة **ممثلون تشغيليون** — يُدارون عبر السجلات وسير العمل.
 
 **مخططات UML:** [`docs/uml/actors.puml`](docs/uml/actors.puml) · [`docs/uml/use-case-overview.puml`](docs/uml/use-case-overview.puml)  
 **توثيق تفصيلي:** [`docs/ACTORS.md`](docs/ACTORS.md)
 
 ---
 
-## الأدوار والصلاحيات *(حسابات الدخول فقط)*
+## الأدوار والصلاحيات *(Dynamic RBAC)*
 
-| الدور | القيمة في DB | الصلاحيات |
-|-------|--------------|-----------|
-| **المسؤول التقني** | `technical_admin` | جميع الصفحات + إدارة المستخدمين (`/users`) |
-| **أمين المخزن** | `warehouse_keeper` | المخزون، التخصيص، الصيانة، السجل، التقارير، الأقسام، الموظفون، الإعدادات |
+الصلاحيات مخزّنة في قاعدة البيانات: `roles`، `permissions`، `role_permission`، و`users.role_id`.
+
+| الدور | slug | الصلاحيات |
+|-------|------|-----------|
+| **المسؤول التقني** | `technical_admin` | المستخدمون، الأدوار، الإعدادات — **بدون** وحدات تشغيلية |
+| **مشرف المخزون** | `inventory_supervisor` | تشغيل كامل + الأقسام + الموظفون + حذف المعدات |
+| **أمين المخزن** | `warehouse_keeper` | عمليات يومية — **بدون** حذف المعدات أو إدارة الهيكل التنظيمي |
 
 - **المصادقة:** جلسة (Session) عبر `/login`
-- **Middleware:** `EnsureRole` — يقيّد `/users/*` على `technical_admin`
+- **Middleware:** `EnsurePermission` — يحمي المسارات حسب slug الصلاحية
+- **أدوار مخصصة:** يمكن للمسؤول التقني إنشاؤها من `/roles`
+- **التفاصيل:** [`docs/ACTORS.md`](docs/ACTORS.md) · [`config/permissions.php`](config/permissions.php)
 
 ### حسابات تجريبية (بعد `migrate --seed`)
 
@@ -154,18 +161,45 @@
 |-------|--------|-------------|
 | المسؤول التقني | admin@mtnima.gov.mr | password |
 | أمين المخزن | storekeeper@mtnima.gov.mr | password |
+| مشرف المخزون | supervisor@mtnima.gov.mr | password |
 
 ---
 
 ## ملخص مخطط قاعدة البيانات
 
-### `users`
+### `roles`
 | العمود | النوع | ملاحظات |
 |--------|-------|---------|
 | id | bigint | PK |
 | name | string | |
+| slug | string | unique — `technical_admin`, … |
+| description | text | nullable |
+| is_system | boolean | الأدوار النظامية لا تُحذف |
+| timestamps | | |
+
+### `permissions`
+| العمود | النوع | ملاحظات |
+|--------|-------|---------|
+| id | bigint | PK |
+| slug | string | unique — e.g. `assets.view` |
+| group | string | للتجميع في الواجهة |
+| timestamps | | |
+
+### `role_permission`
+| العمود | النوع | ملاحظات |
+|--------|-------|---------|
+| role_id | FK | → `roles.id` |
+| permission_id | FK | → `permissions.id` |
+
+### `users`
+| العمود | النوع | ملاحظات |
+|--------|-------|---------|
+| id | bigint | PK |
+| first_name, last_name | string | |
+| name | string | مُولَّد تلقائياً |
+| phone, job_title, employee_number | string | |
 | email | string | unique |
-| role | string | `technical_admin` \| `warehouse_keeper` |
+| role_id | FK | → `roles.id` |
 | password | string | |
 | timestamps | | |
 
@@ -297,15 +331,21 @@ php artisan serve
 php artisan test
 ```
 
-**النتيجة الحالية:** 22 اختباراً · 75 assertion
+**النتيجة الحالية:** 56 اختباراً · 209 assertion
 
 | الملف | النوع | الغرض |
 |-------|-------|--------|
-| `tests/Feature/AssignmentStateTest.php` | Feature | محرك حالة العهد (تخصيص، سحب، تحقق) |
-| `tests/Feature/MaintenanceStateTest.php` | Feature | محرك حالة الصيانة (فتح، إكمال، إلغاء) |
-| `tests/Feature/Asset360Test.php` | Feature | صفحة Asset 360 (عرض، صلاحيات، 404) |
-| `tests/Feature/ExampleTest.php` | Feature | إعادة توجيه الضيف إلى `/login` |
-| `tests/Unit/ExampleTest.php` | Unit | اختبار PHPUnit أساسي |
+| `tests/Feature/AssignmentStateTest.php` | Feature | محرك حالة العهد |
+| `tests/Feature/MaintenanceStateTest.php` | Feature | محرك حالة الصيانة |
+| `tests/Feature/Asset360Test.php` | Feature | Asset 360 |
+| `tests/Feature/RbacAccessTest.php` | Feature | صلاحيات الأدوار النظامية |
+| `tests/Feature/RoleManagementTest.php` | Feature | إدارة الأدوار |
+| `tests/Feature/PermissionAccessTest.php` | Feature | صلاحيات مخصصة |
+| `tests/Feature/InventorySupervisorRoleTest.php` | Feature | مشرف المخزون |
+| `tests/Feature/CustodyReceiptTest.php` | Feature | إيصال العهدة |
+| `tests/Feature/LocaleTest.php` | Feature | تعدد اللغات |
+| `tests/Feature/ExampleTest.php` | Feature | إعادة توجيه الضيف |
+| `tests/Unit/ExampleTest.php` | Unit | PHPUnit أساسي |
 
 ### `AssignmentStateTest` (4)
 
@@ -347,26 +387,29 @@ mawared/
 │   ├── Enums/              AssetStatus, UserRole, MaintenancePriority, MaintenanceStatus
 │   ├── Http/Controllers/   Auth, Dashboard, Inventory, Asset, Assignment,
 │   │                       AssignmentHistory, Maintenance, Department, Employee,
-│   │                       Report, User, Settings, Profile
-│   ├── Http/Middleware/    EnsureRole
+│   │                       Report, User, Role, Settings, Profile
+│   ├── Http/Middleware/    EnsurePermission, SetLocale
 │   └── Models/             Asset, Assignment, AssignmentHistory, Maintenance,
-│                           Department, Employee, User
+│                           Department, Employee, User, Role, Permission
+├── config/
+│   └── permissions.php     RBAC definitions & route map
 ├── docs/
-│   ├── ACTORS.md           UML actors & login vs operational
+│   ├── ACTORS.md           Actors & dynamic RBAC
 │   └── uml/                PlantUML diagrams
 ├── database/
 │   ├── migrations/
-│   ├── factories/          Asset, Assignment, Department, Employee, Maintenance, User
-│   └── seeders/
+│   ├── factories/
+│   └── seeders/            Permission, Role, RolePermission, User, …
 ├── resources/views/
 │   ├── assets/             create, edit, show (Asset 360), _form
 │   ├── maintenances/       index, create, edit, _form
+│   ├── roles/              index, create, edit, _form
 │   ├── assignment-history/
 │   └── components/         sidebar, logo, badges
 ├── public/css/theme.css    هوية MTNIMA
 ├── routes/web.php
 └── tests/
-    ├── Feature/            AssignmentStateTest, MaintenanceStateTest, Asset360Test, ExampleTest
+    ├── Feature/            10 feature test files (56 tests total)
     └── Unit/               ExampleTest
 ```
 
