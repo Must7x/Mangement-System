@@ -80,14 +80,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });
 
-    Route::middleware('permission:assets.view')->group(function () {
-        Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
-        Route::get('/assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
-    });
-
     Route::middleware('permission:assets.create')->group(function () {
         Route::get('/assets/create', [AssetController::class, 'create'])->name('assets.create');
         Route::post('/assets', [AssetController::class, 'store'])->name('assets.store');
+    });
+
+    Route::middleware('permission:assets.view')->group(function () {
+        Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+        Route::get('/assets/{asset}', [AssetController::class, 'show'])->name('assets.show');
     });
 
     Route::middleware('permission:assets.update')->group(function () {
